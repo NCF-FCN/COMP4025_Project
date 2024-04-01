@@ -126,8 +126,13 @@
         new THREE.GLTFLoader().load('models/rock/scene.gltf', function (gltf) {
             rock = gltf.scene;
             scene.add(rock);
+
             rock.scale.set(100, 100, 100);
-            // rock.position.x = 150;
+
+
+            rock.position.x = -100;
+            rock.position.y = 1000;
+            rock.position.z = 800;  
         }, undefined, function (error) {
             console.error(error);
         });
@@ -136,8 +141,10 @@
         new THREE.GLTFLoader().load('models/rock2/scene.gltf', function (gltf) {
             rock2 = gltf.scene;
             scene.add(rock2);
-            // rock2.scale.set(100, 100, 100);
-            // rock2.position.x = 150;
+
+            rock2.scale.set(100, 100, 100);
+            
+            rock2.position.z = -150;
         }, undefined, function (error) {
             console.error(error);
         });
@@ -146,22 +153,27 @@
         new THREE.GLTFLoader().load('models/rock3/scene.gltf', function (gltf) {
             rock3 = gltf.scene;
             scene.add(rock3);
-            // rock3.scale.set(100, 100, 100);
-            // rock3.position.x = 150;
+
+            rock3.scale.set(100, 100, 100);
+
+            rock3.position.x = -700;
+            rock3.position.z = 700;
+
+            rock3.rotation.y = 3;
         }, undefined, function (error) {
             console.error(error);
         });
 
         // Camera position
-        // camera.position.x = 900;
-        // camera.position.y = 600;
+        camera.position.x = 900;
+        camera.position.y = 600;
+        camera.position.z = 900;
+        // camera.position.y = 200;
         // camera.position.z = 900;
-        camera.position.y = 100;
-        camera.position.z = 700;
 
         // DirectionalLight
         var DirectionalLight = new THREE.DirectionalLight(0xffffff, 2.0);
-        DirectionalLight.position.set(-10, 10, 10);
+        DirectionalLight.position.set(-100, 100, -100);
         scene.add(DirectionalLight);
 
         // Mouse move function and listener
