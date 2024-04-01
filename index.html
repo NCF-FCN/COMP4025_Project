@@ -86,7 +86,7 @@
             scene.add(tree2);
 
             tree2.scale.set(0.9, 0.9, 0.9);
-            
+
             tree2.position.x = -150;
             tree2.position.y = -2;
         }, undefined, function (error) {
@@ -94,21 +94,30 @@
         });
 
         var tree3;
-        new THREE.GLTFLoader().load('models/tree3/scene.gltf', function (gltf) {
+        new THREE.GLTFLoader().load('models/tree3/scene.glb', function (gltf) {
             tree3 = gltf.scene;
             scene.add(tree3);
-            tree3.scale.set(100, 100, 100);
-            // tree3.position.x = 150;
+
+            tree3.scale.set(10, 10, 10);
+
+            tree3.position.x = 300;
+            tree3.position.y = -5;
+            tree3.position.z = 500;
+
+            tree3.rotation.z = -0.05;
         }, undefined, function (error) {
             console.error(error);
         });
 
         var tree4;
-        new THREE.GLTFLoader().load('models/tree4/scene.gltf', function (gltf) {
+        new THREE.GLTFLoader().load('models/tree4/scene.glb', function (gltf) {
             tree4 = gltf.scene;
             scene.add(tree4);
+
             tree4.scale.set(100, 100, 100);
-            // tree4.position.x = 150;
+
+            tree4.position.x = 150;
+            tree4.position.y = 5;
         }, undefined, function (error) {
             console.error(error);
         });
@@ -144,9 +153,11 @@
         });
 
         // Camera position
-        camera.position.x = 900;
-        camera.position.y = 600;
-        camera.position.z = 900;
+        // camera.position.x = 900;
+        // camera.position.y = 600;
+        // camera.position.z = 900;
+        camera.position.y = 100;
+        camera.position.z = 700;
 
         // DirectionalLight
         var DirectionalLight = new THREE.DirectionalLight(0xffffff, 2.0);
