@@ -72,7 +72,9 @@
         new THREE.GLTFLoader().load('models/tree/scene.glb', function (gltf) {
             tree = gltf.scene;
             scene.add(tree);
+
             tree.scale.set(0.5, 0.5, 0.5);
+
             tree.position.y = 10;
         }, undefined, function (error) {
             console.error(error);
@@ -82,7 +84,9 @@
         new THREE.GLTFLoader().load('models/tree2/scene.glb', function (gltf) {
             tree2 = gltf.scene;
             scene.add(tree2);
+
             tree2.scale.set(0.9, 0.9, 0.9);
+            
             tree2.position.x = -150;
             tree2.position.y = -2;
         }, undefined, function (error) {
