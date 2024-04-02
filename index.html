@@ -60,11 +60,11 @@
             lake = gltf.scene;
             scene.add(lake);
 
-            lake.scale.set(190, 1, 170);
+            lake.scale.set(160, 1, 170);
 
-            lake.position.x = 280;
-            lake.position.y = 20;
-            lake.position.z = 500;
+            lake.position.x = 400;
+            lake.position.y = 25;
+            lake.position.z = 550;
         }, undefined, function (error) {
             console.error(error);
         });
@@ -101,11 +101,12 @@
 
             tree3.scale.set(10, 10, 10);
 
-            tree3.position.x = 300;
-            tree3.position.y = -5;
+            tree3.position.x = 420;
+            tree3.position.y = -3;
             tree3.position.z = 500;
 
-            tree3.rotation.z = -0.05;
+            tree3.rotation.z = -0.02;
+            tree3.rotation.y = -0.5;
         }, undefined, function (error) {
             console.error(error);
         });
