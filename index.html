@@ -22,15 +22,15 @@
     <script src="js/controls/TrackballControls.js"></script>
     <script>
         // Scene
-        var scene = new THREE.Scene();
+        const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x87cefa);
 
         // Camera
-        var aspect = window.innerWidth / window.innerHeight;
-        var camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10000);
+        const aspect = window.innerWidth / window.innerHeight;
+        const camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 10000);
 
         // Renderer
-        var renderer = new THREE.WebGLRenderer();
+        const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.gammaOutput = true;
         document.body.appendChild(renderer.domElement);
@@ -38,14 +38,18 @@
         // control
         const controls = new THREE.TrackballControls(camera);
 
-        //lakeObjectGroup
-        var lakeObjectGroup = new THREE.Group();
-        scene.add(lakeObjectGroup);
+        //lakeGroup
+        const lakeGroup = new THREE.Group();
+        scene.add(lakeGroup);
+
+        //treeGroup
+        const treeGroup = new THREE.Group();
+        scene.add(treeGroup);
 
         // GLTF object
-        var forest;
         new THREE.GLTFLoader().load('models/forest/scene.glb', function (gltf) {
-            forest = gltf.scene;
+            // forest - 1
+            const forest = gltf.scene;
             scene.add(forest);
 
             forest.scale.set(150, 150, 150);
@@ -53,10 +57,10 @@
             console.error(error);
         });
 
-        var lake;
         new THREE.GLTFLoader().load('models/lake/scene.glb', function (gltf) {
-            lake = gltf.scene;
-            scene.add(lake);
+            //lake - 1 to lakeGroup
+            const lake = gltf.scene;            
+            lakeGroup.add(lake);
 
             lake.scale.set(160, 1, 170);
 
@@ -67,12 +71,10 @@
             console.error(error);
         });
 
-        var tree;
         new THREE.GLTFLoader().load('models/tree/scene.glb', function (gltf) {
-            tree = gltf.scene;
-
-            //tree - 1
-            lakeObjectGroup.add(tree);
+            //tree - 1 to lakeGroup
+            const tree = gltf.scene;
+            lakeGroup.add(tree);
 
             tree.scale.set(0.5, 0.5, 0.5);
 
@@ -86,25 +88,95 @@
             console.error(error);
         });
 
-        var tree2;
         new THREE.GLTFLoader().load('models/tree2/scene.glb', function (gltf) {
-            tree2 = gltf.scene;
-            scene.add(tree2);
+            //tree2 - 1
+            const tree2 = gltf.scene;
+            treeGroup.add(tree2);
 
             tree2.scale.set(0.9, 0.9, 0.9);
 
             tree2.position.x = -150;
             tree2.position.y = -2;
+
+            //tree2 - 2
+            let tree2Clone = tree2.clone();
+            treeGroup.add(tree2Clone);
+
+            tree2Clone.position.x = 150;
+            tree2Clone.position.y = 25;
+            tree2Clone.position.z = 120;
+
+            //tree2 - 3
+            tree2Clone = tree2.clone();
+            treeGroup.add(tree2Clone);
+
+            tree2Clone.position.x = -450;
+            tree2Clone.position.z = -300;
+
+            //tree2 - 4
+            tree2Clone = tree2.clone();
+            treeGroup.add(tree2Clone);
+
+            tree2Clone.position.x = -550;
+            tree2Clone.position.z = -800;
+
+            //tree2 - 5
+            tree2Clone = tree2.clone();
+            treeGroup.add(tree2Clone);
+
+            tree2Clone.position.x = 200;
+            tree2Clone.position.z = -340;
+
+            //tree2 - 6
+            tree2Clone = tree2.clone();
+            treeGroup.add(tree2Clone);
+
+            tree2Clone.position.x = 270;
+            tree2Clone.position.z = -840;
+
+            //tree2 - 7
+            tree2Clone = tree2.clone();
+            treeGroup.add(tree2Clone);
+
+            tree2Clone.position.x = 900;
+            tree2Clone.position.z = -100;
+
+            //tree2 - 8
+            tree2Clone = tree2.clone();
+            treeGroup.add(tree2Clone);
+
+            tree2Clone.position.x = 860;
+            tree2Clone.position.y = 30;
+            tree2Clone.position.z = 900;
+
+            //tree2 - 9
+            tree2Clone = tree2.clone();
+            treeGroup.add(tree2Clone);
+
+            tree2Clone.position.x = -150;
+            tree2Clone.position.z = 800;
+
+            //tree2 - 10
+            tree2Clone = tree2.clone();
+            treeGroup.add(tree2Clone);
+
+            tree2Clone.position.x = -900;
+            tree2Clone.position.z = 900;
+
+            //tree2 - 11
+            tree2Clone = tree2.clone();
+            treeGroup.add(tree2Clone);
+
+            tree2Clone.position.x = -1000;
+            tree2Clone.position.z = -500;
         }, undefined, function (error) {
             console.error(error);
         });
 
-        var tree3;
         new THREE.GLTFLoader().load('models/tree3/scene.glb', function (gltf) {
-            tree3 = gltf.scene;
-            
-            // tree3 - 1
-            lakeObjectGroup.add(tree3);
+            // tree3 - 1 to lakeGroup
+            const tree3 = gltf.scene;
+            lakeGroup.add(tree3);
 
             tree3.scale.set(10, 10, 10);
 
@@ -118,9 +190,9 @@
             console.error(error);
         });
 
-        var tree4;
         new THREE.GLTFLoader().load('models/tree4/scene.glb', function (gltf) {
-            tree4 = gltf.scene;
+            //tree4 - 1
+            const tree4 = gltf.scene;
             scene.add(tree4);
 
             tree4.scale.set(100, 100, 100);
@@ -131,12 +203,10 @@
             console.error(error);
         });
 
-        var rock;
         new THREE.GLTFLoader().load('models/rock/scene.gltf', function (gltf) {
-            rock = gltf.scene;
-
-            //rock - 1
-            lakeObjectGroup.add(rock);
+            //rock - 1 to lakeGroup
+            const rock = gltf.scene;
+            lakeGroup.add(rock);
 
             rock.scale.set(100, 100, 100);
 
@@ -149,21 +219,21 @@
             console.error(error);
         });
 
-        var rock2;
         new THREE.GLTFLoader().load('models/rock2/scene.gltf', function (gltf) {
-            rock2 = gltf.scene;
+            //rock2 - 1
+            const rock2 = gltf.scene;
             scene.add(rock2);
 
             rock2.scale.set(100, 100, 100);
-            
+
             rock2.position.z = -150;
         }, undefined, function (error) {
             console.error(error);
         });
 
-        var rock3;
         new THREE.GLTFLoader().load('models/rock3/scene.gltf', function (gltf) {
-            rock3 = gltf.scene;
+            //rock3 - 1
+            const rock3 = gltf.scene;
             scene.add(rock3);
 
             rock3.scale.set(100, 100, 100);
@@ -174,7 +244,7 @@
             rock3.rotation.y = 3;
         }, undefined, function (error) {
             console.error(error);
-        });       
+        });
 
         // Camera position
         // camera.position.x = 900;
@@ -184,7 +254,7 @@
         camera.position.z = 900;
 
         // DirectionalLight
-        var DirectionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        const DirectionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
         DirectionalLight.position.set(-100, 100, -100);
         scene.add(DirectionalLight);
 
@@ -197,7 +267,7 @@
         // document.addEventListener('mousemove', onMouseMove, false);
 
         // render function
-        var render = function () {
+        const render = function () {
             requestAnimationFrame(render);
 
             controls.update();
