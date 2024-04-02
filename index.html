@@ -38,11 +38,9 @@
         // control
         const controls = new THREE.TrackballControls(camera);
 
-        //treeGroup
-        // var treeGroup = new THREE.Group();
-        // scene.add(treeGroup);
-        // treeGroup.position.y = -150;
-        // treeGroup.rotation.z = -0.01;
+        //lakeObjectGroup
+        var lakeObjectGroup = new THREE.Group();
+        scene.add(lakeObjectGroup);
 
         // GLTF object
         var forest;
@@ -97,7 +95,9 @@
         var tree3;
         new THREE.GLTFLoader().load('models/tree3/scene.glb', function (gltf) {
             tree3 = gltf.scene;
-            scene.add(tree3);
+            
+            // tree3 - 1
+            lakeObjectGroup.add(tree3);
 
             tree3.scale.set(10, 10, 10);
 
@@ -127,14 +127,17 @@
         var rock;
         new THREE.GLTFLoader().load('models/rock/scene.gltf', function (gltf) {
             rock = gltf.scene;
-            scene.add(rock);
+
+            //rock - 1
+            lakeObjectGroup.add(rock);
 
             rock.scale.set(100, 100, 100);
 
-
-            rock.position.x = -100;
+            rock.position.x = 410;
             rock.position.y = 1000;
-            rock.position.z = 800;  
+            rock.position.z = 550;
+
+            rock.rotation.y = -0.5;
         }, undefined, function (error) {
             console.error(error);
         });
@@ -159,12 +162,12 @@
             rock3.scale.set(100, 100, 100);
 
             rock3.position.x = -700;
-            rock3.position.z = 700;
+            rock3.position.z = 600;
 
             rock3.rotation.y = 3;
         }, undefined, function (error) {
             console.error(error);
-        });
+        });       
 
         // Camera position
         camera.position.x = 900;
