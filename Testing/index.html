@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8>
+    <title>Gun</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%
+        }
+    </style>
+</head>
+
+<body>
+    <script src="js/three.js"></script>
+    <script src="js/loaders/GLTFLoader.js"></script>
+    <script src="js/controls/TrackballControls.js"></script>
+    <script>
+        // Scene
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87cefa);
+
+        // Camera
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500000);
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Control
+        const controls = new THREE.TrackballControls(camera);
+
+        // GLTF object
+        new THREE.GLTFLoader().load('models/gun/9mm/body/scene.glb', function (gltf) {
+            const gun9mm_body = gltf.scene;
+            scene.add(gun9mm_body);
+
+            gun9mm_body.position.y = -60;
+        }, undefined, function (error) {
+            console.error(error);
+        });
+
+        new THREE.GLTFLoader().load('models/gun/9mm/bullet/scene.glb', function (gltf) {
+            const gun9mm_bullet = gltf.scene;
+            scene.add(gun9mm_bullet);
+
+            gun9mm_bullet.position.y = -60;
+        }, undefined, function (error) {
+            console.error(error);
+        });
+
+        new THREE.GLTFLoader().load('models/gun/9mm/head/scene.glb', function (gltf) {
+            const gun9mm_head = gltf.scene;
+            scene.add(gun9mm_head);
+
+            gun9mm_head.position.y = -60;
+        }, undefined, function (error) {
+            console.error(error);
+        });
+
+        new THREE.GLTFLoader().load('models/gun/9mm/trigger/scene.glb', function (gltf) {
+            const gun9mm_trigger = gltf.scene;
+            scene.add(gun9mm_trigger);
+
+            gun9mm_trigger.position.y = -60;
+        }, undefined, function (error) {
+            console.error(error);
+        });
+
+        // Camera position
+        camera.position.z = -200;
+
+        // AmbientLight
+        const AmbientLight = new THREE.AmbientLight(0x404040, 150);
+        scene.add(AmbientLight);
+
+        // render function
+        const render = function () {
+            requestAnimationFrame(render);
+
+            controls.update();
+            renderer.render(scene, camera);
+        };
+
+        render();
+    </script>
+</body>
+
+</html>
