@@ -1,10 +1,19 @@
-1. Add the version number to each **commit summary** (e.g. V0.2, V0.3, ...)
+1. Add the version number to each **commit summary** (e.g. V0.1, V0.2, V0.3, ...)
 2. Use "Temp-branch" as the push branch
 3. Remember to edit the README.md
+
+## V0.14
+- Gun models is uploaded
+- Name of all rock models and tree models is modified
+- Comment of all models is modified
+- Testing scene is uploaded
+- README.md is updated
+
 
 ## V0.13
 - Attributes of all models is modified
 - Destination of all tree models and rock models is changed
+- README.md is updated
 
 
 ## V0.12
@@ -84,4 +93,4 @@
 
 
 ## V0.1
-- Project is added to GitHub
+- Project is uploaded to GitHub
