@@ -37,8 +37,9 @@
         const controls = new THREE.TrackballControls(camera);
 
         // GLTF object
+        let gun9mm_body;
         new THREE.GLTFLoader().load('models/gun/9mm/body/scene.glb', function (gltf) {
-            const gun9mm_body = gltf.scene;
+            gun9mm_body = gltf.scene;
             scene.add(gun9mm_body);
 
             gun9mm_body.position.y = -60;
@@ -46,8 +47,9 @@
             console.error(error);
         });
 
+        let gun9mm_bullet;
         new THREE.GLTFLoader().load('models/gun/9mm/bullet/scene.glb', function (gltf) {
-            const gun9mm_bullet = gltf.scene;
+            gun9mm_bullet = gltf.scene;
             scene.add(gun9mm_bullet);
 
             gun9mm_bullet.position.y = -60;
@@ -55,8 +57,9 @@
             console.error(error);
         });
 
+        let gun9mm_head;
         new THREE.GLTFLoader().load('models/gun/9mm/head/scene.glb', function (gltf) {
-            const gun9mm_head = gltf.scene;
+            gun9mm_head = gltf.scene;
             scene.add(gun9mm_head);
 
             gun9mm_head.position.y = -60;
@@ -64,8 +67,9 @@
             console.error(error);
         });
 
+        let gun9mm_trigger;
         new THREE.GLTFLoader().load('models/gun/9mm/trigger/scene.glb', function (gltf) {
-            const gun9mm_trigger = gltf.scene;
+            gun9mm_trigger = gltf.scene;
             scene.add(gun9mm_trigger);
 
             gun9mm_trigger.position.y = -60;
@@ -80,10 +84,31 @@
         const AmbientLight = new THREE.AmbientLight(0x404040, 150);
         scene.add(AmbientLight);
 
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        function onMouseMove(event) {
+            event.preventDefault();
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+
+            gun9mm_head.traverse(function (child) {
+                if (child instanceof THREE.Mesh) {
+                    const intersects = raycaster.intersectObject(child);
+
+                    if (intersects.length > 0) {
+                        gun9mm_head.position.x += 1;
+                        return;
+                    }
+                }
+            });
+        }
+        document.addEventListener('mousemove', onMouseMove, false);
+
         // render function
         const render = function () {
             requestAnimationFrame(render);
-
             controls.update();
             renderer.render(scene, camera);
         };

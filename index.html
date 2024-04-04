@@ -268,13 +268,12 @@
 
         // render function
         const render = function () {
-            requestAnimationFrame(render);
-
-            controls.update();
-            renderer.render(scene, camera);
-
             // var current = tree;
             // current.rotation.y += mouse.y / 150;
+            
+            requestAnimationFrame(render);
+            controls.update();
+            renderer.render(scene, camera);
         };
 
         render();
