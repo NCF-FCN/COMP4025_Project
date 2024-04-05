@@ -10,7 +10,6 @@
         }
 
         canvas {
-            /* display: block; */
             width: 100%;
             height: 100%
         }
@@ -109,7 +108,7 @@
         function onMouseMove(event) {
             event.preventDefault();
 
-            if (!gun9mm_head) return; // Ensure gun9mm_head is defined
+            if (!gun9mm_head) return;
 
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;

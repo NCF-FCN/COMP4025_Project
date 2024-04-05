@@ -1,4 +1,3 @@
-// fragment shader
 precision highp float;
 
 uniform vec3 lightSrc;
@@ -18,9 +17,12 @@ void main() {
     float diff = max(dot(norm, lightDir), 0.0);
 
     // use stepped lighting to get more stylized effect
-    if (diff > 0.5) diff = 1.0;
-    else if (diff > 0.2) diff = 0.5;
-    else diff = 0.2;
+    if(diff > 0.5)
+        diff = 1.0;
+    else if(diff > 0.2)
+        diff = 0.5;
+    else
+        diff = 0.2;
     vec3 diffuse = diff * lightColor;
 
     // sample texture color
@@ -28,16 +30,16 @@ void main() {
     vec3 finalColor = (ambient + diffuse) * texColor.rgb;
 
     // edge detection based on normals
-    float edgeWidth = 1.5; // Width of the outline
-    float edgeThreshold = 0.5; // Threshold, when to show an edge
-    float edgeIntensity = 1.0; // intensity of the edge color
+    float edgeWidth = 1.5;
+    float edgeThreshold = 0.5;
+    float edgeIntensity = 1.0;
 
     // calculate edge by normal direction change
     float edgeFactor = dot(norm, vec3(0.0, 0.0, 1.0));
     edgeFactor = 1.0 - smoothstep(edgeThreshold - edgeWidth, edgeThreshold + edgeWidth, edgeFactor);
 
     // mix object color and outline color by edge detection
-    vec3 outlineColor = vec3(0.0, 0.0, 0.0); // The color of the outline, black in this case.
+    vec3 outlineColor = vec3(0.0, 0.0, 0.0);
     finalColor = mix(finalColor, outlineColor, edgeFactor * edgeIntensity);
 
     gl_FragColor = vec4(finalColor, texColor.a);

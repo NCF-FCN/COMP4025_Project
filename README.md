@@ -2,6 +2,14 @@
 2. Use "Temp-branch" as the push branch
 3. Remember to edit the README.md
 
+## V0.17
+- Gun models is updated
+- README.md is updated
+
+## V0.16
+- Testing uploaded shader
+
+
 ## V0.15
 - Testing is updated
 - README.md is updated
