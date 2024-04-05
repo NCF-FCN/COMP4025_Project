@@ -10,6 +10,7 @@
         }
 
         canvas {
+            /* display: block; */
             width: 100%;
             height: 100%
         }
@@ -21,73 +22,95 @@
     <script src="js/loaders/GLTFLoader.js"></script>
     <script src="js/controls/TrackballControls.js"></script>
     <script>
+
         // Scene
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x87cefa);
 
         // Camera
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500000);
+        camera.position.z = 200;
 
         // Renderer
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Control
-        const controls = new THREE.TrackballControls(camera);
+        // Controls
+        const controls = new THREE.TrackballControls(camera, renderer.domElement);
 
-        // GLTF object
-        let gun9mm_body;
-        new THREE.GLTFLoader().load('models/gun/9mm/body/scene.glb', function (gltf) {
-            gun9mm_body = gltf.scene;
-            scene.add(gun9mm_body);
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404040, 5);
+        scene.add(ambientLight);
 
-            gun9mm_body.position.y = -60;
-        }, undefined, function (error) {
-            console.error(error);
-        });
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        scene.add(directionalLight);
 
-        let gun9mm_bullet;
-        new THREE.GLTFLoader().load('models/gun/9mm/bullet/scene.glb', function (gltf) {
-            gun9mm_bullet = gltf.scene;
-            scene.add(gun9mm_bullet);
-
-            gun9mm_bullet.position.y = -60;
-        }, undefined, function (error) {
-            console.error(error);
-        });
+        // GLTF Loader
+        const gltfLoader = new THREE.GLTFLoader();
 
         let gun9mm_head;
-        new THREE.GLTFLoader().load('models/gun/9mm/head/scene.glb', function (gltf) {
-            gun9mm_head = gltf.scene;
-            scene.add(gun9mm_head);
-
-            gun9mm_head.position.y = -60;
-        }, undefined, function (error) {
-            console.error(error);
-        });
-
+        let gun9mm_bullet;
+        let gun9mm_body;
         let gun9mm_trigger;
-        new THREE.GLTFLoader().load('models/gun/9mm/trigger/scene.glb', function (gltf) {
-            gun9mm_trigger = gltf.scene;
-            scene.add(gun9mm_trigger);
 
-            gun9mm_trigger.position.y = -60;
-        }, undefined, function (error) {
-            console.error(error);
-        });
+        // Load GLTF resources for each object
+        function loadModel(path, callback) {
+            gltfLoader.load(
+                path,
+                function (gltf) {
+                    const object = gltf.scene;
+                    object.position.y = -60;
+                    scene.add(object);
+                    applyShaderToLoadedObject(object);
+                    if (callback) callback(object);
+                },
+                function (xhr) {
+                    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+                },
+                function (error) {
+                    console.error('An error happened', error);
+                }
+            );
+        }
 
-        // Camera position
-        camera.position.z = -200;
+        // Load each gun part
+        loadModel('models/gun/9mm/body/scene.glb', object => gun9mm_body = object);
+        loadModel('models/gun/9mm/bullet/scene.glb', object => gun9mm_bullet = object);
+        loadModel('models/gun/9mm/head/scene.glb', object => gun9mm_head = object);
+        loadModel('models/gun/9mm/trigger/scene.glb', object => gun9mm_trigger = object);
 
-        // AmbientLight
-        const AmbientLight = new THREE.AmbientLight(0x404040, 150);
-        scene.add(AmbientLight);
+        // Apply shader to loaded object
+        function applyShaderToLoadedObject(object) {
+            const shaderLoader = new THREE.FileLoader();
+
+            shaderLoader.load('shader/vertex.glsl', function (vertexShader) {
+                shaderLoader.load('shader/fragment.glsl', function (fragmentShader) {
+                    object.traverse(function (child) {
+                        if (child.isMesh) {
+                            child.material = new THREE.ShaderMaterial({
+                                uniforms: {
+                                    lightSrc: { type: "v3", value: directionalLight.position },
+                                    texture: { type: "t", value: child.material.map }
+                                },
+                                vertexShader: vertexShader,
+                                fragmentShader: fragmentShader
+                            });
+                            child.castShadow = true;
+                        }
+                    });
+                    object.position.y -= 4;
+                });
+            });
+        }
 
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         function onMouseMove(event) {
             event.preventDefault();
+
+            if (!gun9mm_head) return; // Ensure gun9mm_head is defined
+
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
@@ -95,16 +118,24 @@
 
             gun9mm_head.traverse(function (child) {
                 if (child instanceof THREE.Mesh) {
-                    const intersects = raycaster.intersectObject(child);
+                    const intersects = raycaster.intersectObject(child, false);
 
                     if (intersects.length > 0) {
                         gun9mm_head.position.x += 1;
-                        return;
                     }
                 }
             });
         }
         document.addEventListener('mousemove', onMouseMove, false);
+
+        // window resize
+        window.addEventListener('resize', onWindowResize, false);
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            controls.handleResize();
+        }
 
         // render function
         const render = function () {
@@ -114,6 +145,7 @@
         };
 
         render();
+
     </script>
 </body>
 
