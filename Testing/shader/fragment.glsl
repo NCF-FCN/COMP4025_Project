@@ -1,3 +1,4 @@
+// fragement shader
 precision highp float;
 
 uniform vec3 lightSrc;
@@ -8,29 +9,36 @@ varying vec3 fNormal;
 varying vec2 vUv;
 
 void main() {
-    vec3 ambientColor = vec3(0.2, 0.2, 0.2);
-    vec3 lightColor = vec3(1.0, 1.0, 1.0);
+    // Lighting calculations
     vec3 norm = normalize(fNormal);
     vec3 lightDir = normalize(lightSrc - fPosition);
+    vec3 ambientColor = vec3(1.0, 1.0, 1.0);
+    vec3 lightColor = vec3(1.0, 1.0, 1.0);
 
-    vec3 ambient = ambientColor;
-    float diff = max(dot(norm, lightDir), 0.0);
 
-    // use stepped lighting to get more stylized effect
-    if(diff > 0.5)
-        diff = 1.0;
-    else if(diff > 0.2)
-        diff = 0.5;
+    // Toon shading 
+    float intensity;
+    intensity = dot(lightDir, norm);
+    vec4 color;
+    if(intensity > 0.95)
+        color = vec4(1.0, 1.0, 1.0, 1.0);
+    else if(intensity > 0.5)
+        color = vec4(0.6, 0.6, 0.6, 1.0);
+    else if(intensity > 0.25)
+        color = vec4(0.4, 0.4, 0.4, 1.0);
     else
-        diff = 0.2;
-    vec3 diffuse = diff * lightColor;
+        color = vec4(0.2, 0.2, 0.2, 1.0);
 
-    // sample texture color
+    // ambient and diffuse components
+    vec3 ambient = ambientColor * vec3(1.5); 
+    vec3 diffuse = color.rgb * lightColor;
+
+    // Sample texture color
     vec4 texColor = texture2D(texture, vUv);
     vec3 finalColor = (ambient + diffuse) * texColor.rgb;
 
     // edge detection based on normals
-    float edgeWidth = 1.5;
+    float edgeWidth = 0.8;
     float edgeThreshold = 0.5;
     float edgeIntensity = 1.0;
 
