@@ -30,7 +30,7 @@ void main() {
         color = vec4(0.2, 0.2, 0.2, 1.0);
 
     // ambient and diffuse components
-    vec3 ambient = ambientColor * vec3(1.5); 
+    vec3 ambient = ambientColor * vec3(1.0); 
     vec3 diffuse = color.rgb * lightColor;
 
     // Sample texture color
