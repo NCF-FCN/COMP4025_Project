@@ -1,95 +1,117 @@
-1. Add the version number to each **commit summary** (e.g. V0.1, V0.2, V0.3, ...)
+1. Add the new version number to each **Commit Summary** (e.g. V0.1, V0.2, V0.3,...)
 2. Use "Temp-branch" as the push branch
-3. Remember to edit the README.md
+3. Remember to edit README.md
+
+## V0.19
+- A second map has been added, now map1 is "warehouse" and map2 is "forest"
+- The "warehouse" map is basically completed
+- Added sidebar to accommodate buttons
+- Added a button to change the map
+- Added a rule to prevent users from clicking the switch map button when the previous map is not loaded
+- Added function disposeNode() to release memory when switching mappings
+- Modified the model folder
+- Modified the model of "tree2"
+- Rebuild the attributes of "tree2"
+- Modified the attributes of "Lake", "Tree 1", and "Rock"
+- The attributes of "forest" are assimilated into the function loadMap1()
+- The "camera", "aspect", "renderer", "scene" and "controls" properties are set as public variables
+- The beginning of each map code is assimilated into the function mapPrepare()
+- README.md updated
+
+
+## V0.18
+- Updated toon shading
+
 
 ## V0.17
-- Gun models is updated
-- README.md is updated
+- Gun models have been updated
+- README.md updated
+
 
 ## V0.16
-- Testing uploaded shader
+- Test uploaded shaders
 
 
 ## V0.15
-- Testing is updated
-- README.md is updated
+- Test updated
+- README.md updated
 
 
 ## V0.14
-- Gun models is uploaded
-- Name of all rock models and tree models is modified
-- Testing scene is uploaded
-- README.md is updated
+- Gun models have been uploaded
+- Modified the names of all rock models and tree models
+- Test scenario has been uploaded
+- README.md updated
 
 
 ## V0.13
-- Attributes of all models is modified
-- Destination folder of all tree models and rock models is changed
-- README.md is updated
+- Modify all model properties
+- The target folder for all tree models and rock models has been changed
+- README.md updated
 
 
 ## V0.12
-- All variable "var" replaced with "const"
-- Attributes of "forest" and "tree2" is modified
-- Name of "lakeObjectGroup" is replaced with "lakeGroup"
-- "treeGroup" is created
-- README.md is updated
+- Replace all variables "var" with "const"
+- Modified the attributes of "forest" and "tree2"
+- The name of "lakeObjectGroup" is replaced with "lakeGroup"
+- Create "treeGroup"
+- README.md updated
 
 
 ## V0.11
-- Attributes of "tree", "tree3", "rock" is modified
-- README.md is updated
+- Modified the attributes of "tree", "tree3", and "rock"
+- README.md updated
 
 
 ## V0.10
-- Attributes of "rock", "rock3", "tree3" is modified
-- Name of "treeGroup" is replaced with "lakeObjectGroup"
-- README.md is updated
+- Modified the attributes of "rock", "rock3", and "tree3"
+- The name of "treeGroup" is replaced with "lakeObjectGroup"
+- README.md updated
 
 
 ## V0.9
-- Attributes of "lake", "tree3" is modified
-- Model of "forest" is modified
-- README.md is updated
+- Modified the attributes of "lake" and "tree3"
+- Modified the model of "Forest"
+- README.md updated
 
 
 ## V0.8
-- Attributes of "renderer", "DirectionalLight" is modified
-- Model of "forest" is modified
-- README.md is updated
+- Modified the properties of "Renderer" and "DirectionalLight"
+- Modified the model of "Forest"
+- README.md updated
 
 
 ## V0.7
-- Attributes of "rock", "rock2", "rock3" is modified
-- Attributes of "DirectionalLight" is modified
-- Camera offset is modified
-- README.md is updated
+- Modified the attributes of "rock", "rock2", and "rock3"
+- Modified the properties of "DirectionalLight"
+- Modify camera offset
+- README.md updated
 
 
 ## V0.6
-- "license.txt" in all models is deleted
+- Remove "license.txt" in all models
 
 
 ## V0.5
-- Attributes of "tree3", "tree4" is modified
-- Model of "tree3", "tree4" is modified
-- Camera offset is modified
-- README.md is updated
+- Modified the attributes of "tree3" and "tree4"
+- Modified the models of "tree3" and "tree4"
+- Modify camera offset
+- README.md updated
 
 
 ## V0.4
-- Model of "tree2" is modified
+- Modified the model of "tree2"
 
 
 ## V0.3
-- Attributes of "tree" is modified
-- Model of "tree" is modified
-- Camera offset is modified
+- Modified the properties of "Tree"
+- Modified the model of "Tree"
+- Modify camera offset
 
 
 ## V0.2
-- Attributes of "forest", "lake" is modified
+- Modified the attributes of "Forest" and "Lake"
 
 
 ## V0.1
-- Project is uploaded to GitHub
+- The project has been uploaded to GitHub
