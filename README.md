@@ -2,6 +2,15 @@
 2. Use "Temp-branch" as the push branch
 3. Remember to edit README.md
 
+## V0.20
+- Functions loadForest() and loadWarehouse() have been moved to the "js/map/" folder and become js files
+- Modified the attributes of "factory1"
+- Removed "rockGroup", "treeGroup", "factoryGroup" and "containerGroup"
+- Removed "tree4" and "rock2" models
+- "rock3" renamed to "rock2"
+- Added small object models to the "Warehouse" map
+- README.md updated
+
 ## V0.19
 - A second map has been added, now map1 is "warehouse" and map2 is "forest"
 - The "warehouse" map is basically completed
