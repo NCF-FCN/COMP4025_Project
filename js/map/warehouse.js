@@ -25,6 +25,7 @@ function loadWarehouse() {
     // floor x1 -> scene
     new THREE.GLTFLoader().load("models/warehouse/floor/scene.glb", function (gltf) {
         const floor = gltf.scene;
+        shader(floor);
         scene.add(floor);
 
         floor.scale.set(56, 1, 56);
@@ -40,6 +41,7 @@ function loadWarehouse() {
     //factory1 x1 -> scene
     new THREE.GLTFLoader().load("models/warehouse/factory/factory1/scene.glb", function (gltf) {
         const factory1 = gltf.scene;
+        shader(factory1);
         scene.add(factory1);
 
         factory1.scale.set(200, 100, 100);
@@ -55,6 +57,7 @@ function loadWarehouse() {
     //factory2 x1 -> scene
     new THREE.GLTFLoader().load("models/warehouse/factory/factory2/scene.glb", function (gltf) {
         const factory2 = gltf.scene;
+        shader(factory2);
         scene.add(factory2);
 
         factory2.scale.set(16, 17, 17);
@@ -78,6 +81,7 @@ function loadWarehouse() {
 
         positions.forEach((pos) => {
             let wall1 = gltf.scene.clone();
+            shader(wall1);
             wallGroup.add(wall1);
 
             wall1.position.set(pos.x, 130, pos.z);
@@ -115,6 +119,7 @@ function loadWarehouse() {
 
         positions.forEach((pos) => {
             let wall2 = gltf.scene.clone();
+            shader(wall2);
             wallGroup.add(wall2);
 
             wall2.position.set(pos.x, 5, pos.z);
@@ -134,13 +139,14 @@ function loadWarehouse() {
     new THREE.GLTFLoader().load("models/warehouse/door/scene.glb", function (gltf) {
         const positions = [
             { x: 15, y: 95, z: 1530 },
-            { x: -895, y: 95, z: -1260 }
+            { x: -895, y: 95, z: -1264 }
         ]
 
         gltf.scene.scale.set(0.55, 0.55, 0.55);
 
         positions.forEach((pos) => {
             let door = gltf.scene.clone();
+            shader(door);
             scene.add(door);
 
             door.position.set(pos.x, pos.y, pos.z);
@@ -167,6 +173,7 @@ function loadWarehouse() {
 
         positions.forEach((pos) => {
             let container1 = gltf.scene.clone();
+            shader(container1);
             scene.add(container1);
 
             container1.position.set(pos.x, 0, pos.z);
@@ -189,6 +196,7 @@ function loadWarehouse() {
 
         positions.forEach((pos) => {
             let container2 = gltf.scene.clone();
+            shader(container2);
             scene.add(container2);
 
             container2.position.set(pos.x, 0, pos.z);
@@ -220,6 +228,7 @@ function loadWarehouse() {
 
         positions.forEach((pos) => {
             let pallet = gltf.scene.clone();
+            shader(pallet);
             smallObject1Group.add(pallet);
 
             pallet.position.set(pos.x, pos.y, pos.z);
@@ -248,8 +257,9 @@ function loadWarehouse() {
 
         positions.forEach((pos) => {
             let box = gltf.scene.clone();
+            shader(box);
 
-            if (pos.z > 200) {
+            if (pos.z < 200) {
                 smallObject1Group.add(box);
             } else {
                 smallObject2Group.add(box);
@@ -265,22 +275,29 @@ function loadWarehouse() {
         loadedModel++;
     });
 
-    //shelve x3 -> smallObject2Group, smallObject3Group
-    new THREE.GLTFLoader().load("models/warehouse/shelve/scene.glb", function (gltf) {
+    //shelves x3 -> smallObject2Group, smallObject3Group
+    new THREE.GLTFLoader().load("models/warehouse/shelves/scene.glb", function (gltf) {
+        const positions = [
+            { x: -820, z: 420 },
+            { x: -820, z: 705 },
+            { x: 800, z: 0 }
+        ]
+
         gltf.scene.scale.set(45, 45, 45);
-        gltf.scene.rotation.y = Math.PI / 2;
 
-        let shelve = gltf.scene.clone();
-        smallObject2Group.add(shelve);
-        shelve.position.set(-820, 0, 420);
+        positions.forEach((pos) => {
+            let shelves = gltf.scene.clone();
+            shader(shelves);
 
-        shelve = gltf.scene.clone();
-        smallObject2Group.add(shelve);
-        shelve.position.set(-820, 0, 705);
+            if (pos.x < 0) {
+                smallObject2Group.add(shelves);
+            } else {
+                smallObject3Group.add(shelves);
+            }
 
-        shelve = gltf.scene.clone();
-        smallObject3Group.add(shelve);
-        shelve.position.set(800, 0, 0);
+            shelves.position.set(pos.x, 0, pos.z);
+            shelves.rotation.y = Math.PI / 2;
+        });
 
         loadedModel++;
     }, undefined, function (error) {
@@ -294,16 +311,19 @@ function loadWarehouse() {
         // gltf.scene.castShadow = true;
 
         let standing_light = gltf.scene.clone();
+        shader(standing_light);
         scene.add(standing_light);
         standing_light.position.set(-510, 130, -70);
         standing_light.rotation.y = 0.7;
 
         standing_light = gltf.scene.clone();
+        shader(standing_light);
         scene.add(standing_light);
         standing_light.position.set(510, 130, 510);
         standing_light.rotation.y = Math.PI + 0.32;
 
         standing_light = gltf.scene.clone();
+        shader(standing_light);
         scene.add(standing_light);
         standing_light.position.set(640, 412, -980);
         standing_light.rotation.y = Math.PI / 2 - 0.3;
@@ -329,6 +349,7 @@ function loadWarehouse() {
 
         positions.forEach((pos) => {
             let safety_cone = gltf.scene.clone();
+            shader(safety_cone);
             scene.add(safety_cone);
 
             safety_cone.position.set(pos.x, 0, pos.z);
@@ -356,6 +377,7 @@ function loadWarehouse() {
 
         positions.forEach((pos) => {
             let barrel = gltf.scene.clone();
+            shader(barrel);
             smallObject3Group.add(barrel);
 
             barrel.position.set(pos.x, pos.y || 17, pos.z);
@@ -377,12 +399,12 @@ function loadWarehouse() {
     // camera.position.y = 600;
     // camera.position.z = 900;
     camera.position.y = 400;
-    camera.position.z = 800;
+    camera.position.z = 1000;
 
     //directional light
     const directionalLight = new THREE.DirectionalLight(0xffffff);
     directionalLight.position.set(100, 100, 100);
-    directionalLight.castShadow = true;
+    // directionalLight.castShadow = true;
     scene.add(directionalLight);
 
     //spotlight
@@ -395,6 +417,7 @@ function loadWarehouse() {
         // spotLight.shadow.camera.far = 1000;
         // spotLight.shadow.mapSize.width = 1024;
         // spotLight.shadow.mapSize.height = 1024;
+        shader(spotLight);
         scene.add(spotLight);
 
         // var helper = new THREE.CameraHelper(spotLight.shadow.camera);
@@ -408,6 +431,7 @@ function loadWarehouse() {
         // spotLight.shadow.camera.far = 1000;
         // spotLight.shadow.mapSize.width = 1024;
         // spotLight.shadow.mapSize.height = 1024;
+        shader(spotLight);
         scene.add(spotLight);
 
         // var helper = new THREE.CameraHelper(spotLight.shadow.camera);
@@ -417,6 +441,28 @@ function loadWarehouse() {
     spotlight(-510, 170, -70, 0, 170, 530);
     spotlight(510, 170, 510, 200, 170, -1000);
     spotlight(640, 412, -980, 200, 412, -1100);
+
+    //shader
+    function shader(object) {
+        const shaderLoader = new THREE.FileLoader();
+
+        shaderLoader.load('shader/vertex.glsl', function (vertexShader) {
+            shaderLoader.load('shader/fragment.glsl', function (fragmentShader) {
+                object.traverse(function (child) {
+                    if (child.isMesh) {
+                        child.material = new THREE.ShaderMaterial({
+                            uniforms: {
+                                lightSrc: { type: "v3", value: directionalLight.position },
+                                texture: { type: "t", value: child.material.map }
+                            },
+                            vertexShader: vertexShader,
+                            fragmentShader: fragmentShader
+                        });
+                    }
+                });
+            });
+        });
+    }
 
     //render
     const render = function () {

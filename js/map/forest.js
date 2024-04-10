@@ -12,6 +12,7 @@ function loadForest() {
     // forest x1 -> scene
     new THREE.GLTFLoader().load("models/forest/forest/scene.glb", function (gltf) {
         const forest = gltf.scene;
+        shader(forest);
         scene.add(forest);
 
         forest.scale.set(150, 150, 150);
@@ -25,6 +26,7 @@ function loadForest() {
     //lake x1 -> lakeGroup
     new THREE.GLTFLoader().load("models/forest/lake/scene.glb", function (gltf) {
         const lake = gltf.scene;
+        shader(lake);
         lakeGroup.add(lake);
 
         lake.scale.set(160, 1, 170);
@@ -38,13 +40,14 @@ function loadForest() {
 
     //tree1 x1 -> lakeGroup
     new THREE.GLTFLoader().load("models/forest/tree/tree1/scene.glb", function (gltf) {
-        const tree = gltf.scene;
-        lakeGroup.add(tree);
+        const tree1 = gltf.scene;
+        shader(tree1);
+        lakeGroup.add(tree1);
 
-        tree.scale.set(0.5, 0.5, 0.5);
-        tree.position.set(380, 60, 550);
-        tree.rotation.x = -0.2;
-        tree.rotation.y = -2.7;
+        tree1.scale.set(0.5, 0.5, 0.5);
+        tree1.position.set(380, 60, 550);
+        tree1.rotation.x = -0.2;
+        tree1.rotation.y = -2.7;
 
         loadedModel++;
     }, undefined, function (error) {
@@ -74,6 +77,7 @@ function loadForest() {
 
         positions.forEach((pos) => {
             let tree2 = gltf.scene.clone();
+            shader(tree2);
             scene.add(tree2);
 
             tree2.position.set(pos.x || 0, pos.y || 0, pos.z || 0);
@@ -89,6 +93,7 @@ function loadForest() {
     //tree3 x1 -> lakeGroup
     new THREE.GLTFLoader().load("models/forest/tree/tree3/scene.glb", function (gltf) {
         const tree3 = gltf.scene;
+        shader(tree3);
         lakeGroup.add(tree3);
 
         tree3.scale.set(10, 10, 10);
@@ -104,12 +109,13 @@ function loadForest() {
 
     //rock x1 -> lakeGroup
     new THREE.GLTFLoader().load("models/forest/rock/rock1/scene.glb", function (gltf) {
-        const rock = gltf.scene;
-        lakeGroup.add(rock);
+        const rock1 = gltf.scene;
+        shader(rock1);
+        lakeGroup.add(rock1);
 
-        rock.scale.set(100, 100, 100);
-        rock.position.set(390, 1000, 540);
-        rock.rotation.y = -0.5;
+        rock1.scale.set(100, 100, 100);
+        rock1.position.set(390, 1000, 540);
+        rock1.rotation.y = -0.5;
 
         loadedModel++;
     }, undefined, function (error) {
@@ -120,6 +126,7 @@ function loadForest() {
     //rock2 x1 -> scene
     new THREE.GLTFLoader().load("models/forest/rock/rock2/scene.glb", function (gltf) {
         const rock2 = gltf.scene;
+        shader(rock2);
         scene.add(rock2);
 
         rock2.scale.set(100, 100, 100);
@@ -132,17 +139,40 @@ function loadForest() {
         loadedModel++;
     });
 
+    //directional light
+    const directionalLight = new THREE.DirectionalLight(0xffffff);
+    directionalLight.position.set(100, 100, 100);
+    // directionalLight.castShadow = true;
+    scene.add(directionalLight);
+
+    //shader
+    function shader(object) {
+        const shaderLoader = new THREE.FileLoader();
+
+        shaderLoader.load('shader/vertex.glsl', function (vertexShader) {
+            shaderLoader.load('shader/fragment.glsl', function (fragmentShader) {
+                object.traverse(function (child) {
+                    if (child.isMesh) {
+                        child.material = new THREE.ShaderMaterial({
+                            uniforms: {
+                                lightSrc: { type: "v3", value: directionalLight.position },
+                                texture: { type: "t", value: child.material.map }
+                            },
+                            vertexShader: vertexShader,
+                            fragmentShader: fragmentShader
+                        });
+                    }
+                });
+            });
+        });
+    }
+
     // Camera position
     // camera.position.x = 900;
     // camera.position.y = 600;
     // camera.position.z = 900;
     camera.position.y = 200;
     camera.position.z = 900;
-
-    // directional light
-    const DirectionalLight = new THREE.DirectionalLight(0xffffff);
-    DirectionalLight.position.set(100, 100, 100);
-    scene.add(DirectionalLight);
 
     // render function
     const render = function () {
