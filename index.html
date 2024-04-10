@@ -59,6 +59,8 @@
     <script src="js/three.js"></script>
     <script src="js/loaders/GLTFLoader.js"></script>
     <script src="js/controls/TrackballControls.js"></script>
+    <script src="js/map/forest.js"></script>
+    <script src="js/map/warehouse.js"></script>
     <script>
         document.getElementById("toggleSidebar").addEventListener("click", function () {
             const sidebar = document.getElementById("sidebar");
@@ -79,15 +81,19 @@
         let renderer = new THREE.WebGLRenderer();
 
         document.getElementById("switchMap").addEventListener("click", function () {
+            //check the loading progress
             if (loadedModel < totalModel) {
                 alert("Please wait for the map to load and press the button again.");
                 return;
             }
 
+            //choose which map to load and set the total model amount
             if (scene.name === "forest") {
                 loadWarehouse();
+                totalModel = 12;
             } else {
                 loadForest();
+                totalModel = 9;
             }
         });
 
@@ -121,6 +127,15 @@
         }
 
         function mapPrepare() {
+            //clean the scene
+            if (scene) {
+                while (scene.children.length > 0) {
+                    scene.remove(scene.children[0]);
+                    scene.traverse(disposeNode);
+                    renderer.clear();
+                }
+            }
+
             // reset loadedModel
             loadedModel = 0;
 
@@ -134,454 +149,12 @@
             // Renderer
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.gammaOutput = true;
+            // renderer.shadowMap.enabled = true;
+            // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             document.body.appendChild(renderer.domElement);
 
             // control
             controls = new THREE.TrackballControls(camera);
-        }
-
-        //map1
-        function loadForest() {
-            //set the totalModel
-            totalModel = 9;
-
-            //clean the scene
-            if (scene) {
-                while (scene.children.length > 0) {
-                    scene.remove(scene.children[0]);
-                    scene.traverse(disposeNode);
-                    renderer.clear();
-                }
-            }
-
-            mapPrepare();
-
-            //scene attribute
-            scene.name = "forest";
-
-            //lakeGroup
-            const lakeGroup = new THREE.Group();
-            scene.add(lakeGroup);
-
-            //treeGroup
-            const treeGroup = new THREE.Group();
-            scene.add(treeGroup);
-
-            //rockGroup
-            const rockGroup = new THREE.Group();
-            scene.add(rockGroup);
-
-            // GLTF object
-            // forest x1 -> scene
-            new THREE.GLTFLoader().load("models/forest/forest/scene.glb", function (gltf) {
-                const forest = gltf.scene;
-                scene.add(forest);
-
-                forest.scale.set(150, 150, 150);
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //lake x1 -> lakeGroup
-            new THREE.GLTFLoader().load("models/forest/lake/scene.glb", function (gltf) {
-                const lake = gltf.scene;
-                lakeGroup.add(lake);
-
-                lake.scale.set(160, 1, 170);
-                lake.position.set(400, 25, 550);
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //tree1 x1 -> lakeGroup
-            new THREE.GLTFLoader().load("models/forest/tree/tree1/scene.glb", function (gltf) {
-                const tree = gltf.scene;
-                lakeGroup.add(tree);
-
-                tree.scale.set(0.5, 0.5, 0.5);
-                tree.position.set(380, 60, 550);
-                tree.rotation.x = -0.2;
-                tree.rotation.y = -2.7;
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //tree2 x11 -> treeGroup
-            new THREE.GLTFLoader().load("models/forest/tree/tree2/scene.glb", function (gltf) {
-                const positions = [
-                    { x: -240, y: -5, z: -90 },
-                    { x: 50, y: 25, z: 200 },
-                    { x: -450, y: -7, z: -300 },
-                    { x: -550, y: -10, z: -800 },
-                    { x: 200, y: -5, z: -340 },
-                    { x: 270, y: 20, z: -870 },
-                    { x: 900, y: -10, z: -100 },
-                    { x: -150, y: -8, z: 800 },
-                    { x: -900, y: -5, z: 900 },
-                    { x: -1000, y: -5, z: -500 },
-                    { x: -900, y: -8, z: -800 },
-                    { x: -100, y: 20, z: -950 },
-                    { x: 900, y: -15, z: -950 }
-                ];
-
-                gltf.scene.scale.set(450, 450, 450);
-
-                positions.forEach((pos) => {
-                    let tree2 = gltf.scene.clone();
-                    treeGroup.add(tree2);
-
-                    tree2.position.set(pos.x || 0, pos.y || 0, pos.z || 0);
-                    tree2.rotation.y = Math.random() * Math.PI * 2;
-                });
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //tree3 x1 -> lakeGroup
-            new THREE.GLTFLoader().load("models/forest/tree/tree3/scene.glb", function (gltf) {
-                const tree3 = gltf.scene;
-                lakeGroup.add(tree3);
-
-                tree3.scale.set(10, 10, 10);
-                tree3.position.set(400, -3, 490);
-                tree3.rotation.y = -0.5;
-                tree3.rotation.z = -0.02;
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //tree4 x1 -> treeGroup
-            new THREE.GLTFLoader().load("models/forest/tree/tree4/scene.glb", function (gltf) {
-                const tree4 = gltf.scene;
-                treeGroup.add(tree4);
-
-                tree4.scale.set(100, 100, 100);
-                tree4.position.set(150, 5, 0);
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //rock x1 -> lakeGroup
-            new THREE.GLTFLoader().load("models/forest/rock/rock1/scene.glb", function (gltf) {
-                const rock = gltf.scene;
-                lakeGroup.add(rock);
-
-                rock.scale.set(100, 100, 100);
-                rock.position.set(390, 1000, 540);
-                rock.rotation.y = -0.5;
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //rock2 x1 -> rockGroup
-            new THREE.GLTFLoader().load("models/forest/rock/rock2/scene.glb", function (gltf) {
-                const rock2 = gltf.scene;
-                rockGroup.add(rock2);
-
-                rock2.scale.set(100, 100, 100);
-                rock2.position.z = -150;
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //rock3 x1 -> rockGroup
-            new THREE.GLTFLoader().load("models/forest/rock/rock3/scene.glb", function (gltf) {
-                const rock3 = gltf.scene;
-                rockGroup.add(rock3);
-
-                rock3.scale.set(100, 100, 100);
-                rock3.position.set(-700, 0, 600);
-                rock3.rotation.y = 3;
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            // Camera position
-            // camera.position.x = 900;
-            // camera.position.y = 600;
-            // camera.position.z = 900;
-            camera.position.y = 200;
-            camera.position.z = 900;
-
-            // directional light
-            const DirectionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
-            DirectionalLight.position.set(100, 100, 100);
-            scene.add(DirectionalLight);
-
-            // render function
-            const render = function () {
-                requestAnimationFrame(render);
-                controls.update();
-                renderer.render(scene, camera);
-            };
-
-            render();
-        }
-
-        function loadWarehouse() {
-            //set the totalModel
-            totalModel = 8;
-
-            //clean the scene
-            if (scene) {
-                while (scene.children.length > 0) {
-                    scene.remove(scene.children[0]);
-                    scene.traverse(disposeNode);
-                    renderer.clear();
-                }
-            }
-
-            mapPrepare();
-
-            //scene attribute
-            scene.name = "warehouse";
-
-            //wallGroup
-            const wallGroup = new THREE.Group();
-            scene.add(wallGroup);
-
-            //factoryGroup
-            const factoryGroup = new THREE.Group();
-            scene.add(factoryGroup);
-
-            //containerGroup
-            const containerGroup = new THREE.Group();
-            scene.add(containerGroup);
-
-            // GLTF object
-            // floor x1 -> scene
-            new THREE.GLTFLoader().load("models/warehouse/floor/scene.glb", function (gltf) {
-                const floor = gltf.scene;
-                scene.add(floor);
-
-                floor.scale.set(56, 1, 56);
-
-                floor.rotation.y = Math.PI / 2;
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //factory1 x1 -> factoryGroup
-            new THREE.GLTFLoader().load("models/warehouse/factory/factory1/scene.glb", function (gltf) {
-                const factory1 = gltf.scene;
-                factoryGroup.add(factory1);
-
-                factory1.scale.set(100, 100, 100);
-                factory1.position.set(-60, 390, -2040);
-                factory1.rotation.y = - Math.PI / 2;
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //factory2 x1 -> factoryGroup
-            new THREE.GLTFLoader().load("models/warehouse/factory/factory2/scene.glb", function (gltf) {
-                const factory2 = gltf.scene;
-                factoryGroup.add(factory2);
-
-                factory2.scale.set(16, 17, 17);
-                factory2.position.set(-1330, 190, 180);
-                factory2.rotation.y = - Math.PI / 2;
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //wall1 x2 -> wallGroup
-            new THREE.GLTFLoader().load("models/warehouse/wall/wall1/scene.glb", function (gltf) {
-                const positions = [
-                    { x: -785, z: -1610 },
-                    { x: -930, z: -1580 }
-                ]
-
-                gltf.scene.scale.set(8, 40, 55);
-
-                positions.forEach((pos) => {
-                    let wall1 = gltf.scene.clone();
-                    wallGroup.add(wall1);
-
-                    wall1.position.set(pos.x, 130, pos.z);
-
-                    if (pos.x < -800) {
-                        wall1.rotation.y = Math.PI / 2;
-                    }
-                });
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //wall2 x13 -> wallGroup
-            new THREE.GLTFLoader().load("models/warehouse/wall/wall2/scene.glb", function (gltf) {
-                const positions = [
-                    { x: 910, z: -1456 },
-                    { x: 910, z: -1096 },
-                    { x: 910, z: -732 },
-                    { x: 910, z: -368 },
-                    { x: 910, z: -4 },
-                    { x: 910, z: 360 },
-                    { x: 910, z: 724 },
-                    { x: 910, z: 1088 },
-                    { x: 910, z: 1452 },
-                    { x: 730, z: 1560 },
-                    { x: 366, z: 1560 },
-                    { x: -362, z: 1560 },
-                    { x: -726, z: 1560 }
-                ]
-
-                gltf.scene.scale.set(70, 70, 70);
-
-                positions.forEach((pos) => {
-                    let wall2 = gltf.scene.clone();
-                    wallGroup.add(wall2);
-
-                    wall2.position.set(pos.x, 5, pos.z);
-
-                    if (pos.z > 1500 || pos.x < -800) {
-                        wall2.rotation.y = Math.PI / 2;
-                    }
-                });
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //door x2 -> scene
-            new THREE.GLTFLoader().load("models/warehouse/door/scene.glb", function (gltf) {
-                const positions = [
-                    { x: 15, y: 95, z: 1530 },
-                    { x: -895, y: 95, z: -1260 }
-                ]
-
-                gltf.scene.scale.set(0.55, 0.55, 0.55);
-
-                positions.forEach((pos) => {
-                    let door = gltf.scene.clone();
-                    scene.add(door);
-
-                    door.position.set(pos.x, pos.y, pos.z);
-
-                    if (pos.z > 0) {
-                        door.rotation.y = Math.PI / 2;
-                    }
-                });
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //container1 x1 -> containerGroup
-            new THREE.GLTFLoader().load("models/warehouse/container/container1/scene.gltf", function (gltf) {
-                const positions = [
-                    { x: 730, z: -1220 },
-                    { x: -750, z: 1180 }
-                ]
-
-                gltf.scene.scale.set(105, 105, 105);
-
-                positions.forEach((pos) => {
-                    let container1 = gltf.scene.clone();
-                    containerGroup.add(container1);
-
-                    container1.position.set(pos.x, 0, pos.z);
-                });
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            //container2 x2 -> containerGroup
-            new THREE.GLTFLoader().load("models/warehouse/container/container2/scene.gltf", function (gltf) {
-                const positions = [
-                    { x: -715, z: -440 },
-                    { x: 700, z: 860 }
-                ]
-
-                gltf.scene.scale.set(110, 110, 110);
-
-                positions.forEach((pos) => {
-                    let container3 = gltf.scene.clone();
-                    containerGroup.add(container3);
-
-                    container3.position.set(pos.x, 0, pos.z);
-
-                    if (pos.x < 0) {
-                        container3.rotation.y = -0.053;
-                    }
-
-                    if (pos.x > 0) {
-                        container3.rotation.y = Math.PI - 0.07;
-                    }
-                });
-
-                loadedModel++;
-            }, undefined, function (error) {
-                console.error(error);
-                loadedModel++;
-            });
-
-            // Camera position
-            // camera.position.x = 900;
-            // camera.position.y = 600;
-            // camera.position.z = 900;
-            camera.position.y = 500;
-            camera.position.z = 1000;
-
-            // directional light
-            const DirectionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
-            DirectionalLight.position.set(100, 100, 100);
-            scene.add(DirectionalLight);
-
-            // render function
-            const render = function () {
-                requestAnimationFrame(render);
-                controls.update();
-                renderer.render(scene, camera);
-            };
-
-            render();
         }
 
         //load warehouse first
