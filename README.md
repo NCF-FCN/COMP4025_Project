@@ -2,6 +2,11 @@
 2. Use "Temp-branch" as the push branch
 3. Remember to edit README.md
 
+## V0.22 beta 3
+- Modified model of pistol bullet
+- README.md updated
+
+
 ## V0.22 beta 2
 - Small edit
 - README.md updated

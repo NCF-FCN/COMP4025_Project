@@ -437,11 +437,10 @@ function loadWarehouse() {
         console.error(error);
     });
 
-    new THREE.GLTFLoader().load("models/gun/bullet/scene.gltf", function (gltf) {
+    new THREE.GLTFLoader().load("models/gun/glock/bullet.glb", function (gltf) {
         gunBullet = gltf.scene;
         gunBullet.scale.set(0.3, 0.3, 0.3);
         gunBullet.position.set(0, 140, 0);
-        gunBullet.rotation.y = Math.PI / 2;
     }, undefined, function (error) {
         console.error(error);
     });
