@@ -20,16 +20,14 @@ void main() {
     intensity = dot(lightDir, norm);
 
     vec3 color;
-    if(intensity > .9) {
+    if(intensity > .8) {
         color = vec3(0.7);
     } else if(intensity > .7) {
         color = vec3(0.6);
     } else if(intensity > .5) {
         color = vec3(0.5);
-    } else if(intensity > .3) {
-        color = vec3(0.4);
-    } else if(intensity > .1) {
-        color = vec3(0.3);
+    } else {
+        color = vec3(0.45);
     }
 
     // ambient and diffuse components

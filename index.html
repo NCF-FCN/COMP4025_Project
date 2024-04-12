@@ -58,7 +58,6 @@
 
     <script src="js/three.js"></script>
     <script src="js/loaders/GLTFLoader.js"></script>
-    <script src="js/controls/TrackballControls.js"></script>
     <script src="js/map/forest.js"></script>
     <script src="js/map/warehouse.js"></script>
     <script>
@@ -89,11 +88,11 @@
 
             //choose which map to load and set the total model amount
             if (scene.name === "forest") {
-                loadWarehouse();
                 totalModel = 14;
+                loadWarehouse();
             } else {
-                loadForest();
                 totalModel = 7;
+                loadForest();
             }
         });
 
@@ -152,9 +151,6 @@
             // renderer.shadowMap.enabled = true;
             // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             document.body.appendChild(renderer.domElement);
-
-            // control
-            controls = new THREE.TrackballControls(camera);
         }
 
         //load warehouse first

@@ -152,6 +152,8 @@ function loadForest() {
         shaderLoader.load('shader/vertex.glsl', function (vertexShader) {
             shaderLoader.load('shader/fragment.glsl', function (fragmentShader) {
                 object.traverse(function (child) {
+                    child.castShadow = true;
+                    
                     if (child.isMesh) {
                         child.material = new THREE.ShaderMaterial({
                             uniforms: {
