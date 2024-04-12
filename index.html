@@ -43,8 +43,15 @@
             left: 0px;
         }
 
-        #switchMap {
+        #switchMap,
+        #loadAWP,
+        #loadGlock,
+        #loadM249 {
+            width: 120px;
+            height: fit-content;
             padding: 20px;
+            margin-top: 5px;
+            margin-bottom: 5px;
         }
     </style>
 </treeGroup>
@@ -54,6 +61,11 @@
 
     <div id="sidebar">
         <button id="switchMap">Switch Map</button>
+        <p>
+            <button id="loadAWP">Load AWP</button>
+            <button id="loadGlock">Load Glock</button>
+            <button id="loadM249">Load M249</button>
+        </p>
     </div>
 
     <script src="js/three.js"></script>
@@ -73,8 +85,7 @@
                 sidebar.classList.add("open");
             }
         });
-    </script>
-    <script>
+
         let scene, camera, controls, loadedModel, totalModel;
         let aspect = window.innerWidth / window.innerHeight;
         let renderer = new THREE.WebGLRenderer();

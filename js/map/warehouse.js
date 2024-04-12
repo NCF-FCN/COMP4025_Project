@@ -518,7 +518,6 @@ function loadWarehouse() {
     function animate() {
         requestAnimationFrame(animate);
 
-        const time = Date.now() * 0.05;
         const direction = new THREE.Vector3();
         camera.getWorldDirection(direction);
 
@@ -530,15 +529,15 @@ function loadWarehouse() {
             camera.position.addScaledVector(direction, -player.speed);
         }
 
-        const right = new THREE.Vector3();
-        right.crossVectors(camera.up, direction).normalize();
+        const horizontal = new THREE.Vector3();
+        horizontal.crossVectors(camera.up, direction).normalize();
 
         if (keyboard[65]) { // A key
-            camera.position.addScaledVector(right, player.speed);
+            camera.position.addScaledVector(horizontal, player.speed);
         }
 
         if (keyboard[68]) { // D key
-            camera.position.addScaledVector(right, -player.speed);
+            camera.position.addScaledVector(horizontal, -player.speed);
         }
 
         if (keyboard[75]) { // K key

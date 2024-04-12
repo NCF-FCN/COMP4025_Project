@@ -2,10 +2,17 @@
 2. Use "Temp-branch" as the push branch
 3. Remember to edit README.md
 
+## V0.22 beta 2
+- Small edit
+- README.md updated
+
+
 ## V0.22 beta
 - Deleted Trace back control
 - Added keyboard control to "warehouse" map
 - Added "worldGroup" to rotate "warehouse" map
+- README.md updated
+
 
 ## V0.21
 - Modified the properties of "shelves"
