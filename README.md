@@ -2,6 +2,11 @@
 2. Use "Temp-branch" as the push branch
 3. Remember to edit README.md
 
+## V0.23 
+- Added node.js server and socket
+- Added player model
+
+
 ## V0.22 beta
 - Deleted Trace back control
 - Added keyboard control to "warehouse" map
