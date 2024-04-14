@@ -411,7 +411,11 @@ function loadWarehouse() {
         loadedModel++;
     });
 
-    //pistol part
+
+
+    
+
+    //load gun (pistol part)
     new THREE.GLTFLoader().load("models/gun/glock/body.glb", function (gltf) {
         gunBody = gltf.scene;
         shader(gunBody);
@@ -437,10 +441,11 @@ function loadWarehouse() {
         console.error(error);
     });
 
-    new THREE.GLTFLoader().load("models/gun/glock/bullet.glb", function (gltf) {
+    new THREE.GLTFLoader().load("models/gun/bullet/scene.gltf", function (gltf) {
         gunBullet = gltf.scene;
         gunBullet.scale.set(0.3, 0.3, 0.3);
         gunBullet.position.set(0, 140, 0);
+        gunBullet.rotation.y = Math.PI / 2;
     }, undefined, function (error) {
         console.error(error);
     });
@@ -514,9 +519,11 @@ function loadWarehouse() {
         });
     }
 
+    // gun animation
     function animate() {
         requestAnimationFrame(animate);
 
+        const time = Date.now() * 0.05;
         const direction = new THREE.Vector3();
         camera.getWorldDirection(direction);
 
@@ -528,15 +535,15 @@ function loadWarehouse() {
             camera.position.addScaledVector(direction, -player.speed);
         }
 
-        const horizontal = new THREE.Vector3();
-        horizontal.crossVectors(camera.up, direction).normalize();
+        const right = new THREE.Vector3();
+        right.crossVectors(camera.up, direction).normalize();
 
         if (keyboard[65]) { // A key
-            camera.position.addScaledVector(horizontal, player.speed);
+            camera.position.addScaledVector(right, player.speed);
         }
 
         if (keyboard[68]) { // D key
-            camera.position.addScaledVector(horizontal, -player.speed);
+            camera.position.addScaledVector(right, -player.speed);
         }
 
         if (keyboard[75]) { // K key
@@ -579,6 +586,7 @@ function loadWarehouse() {
             isAnimating = true;
             const gunBulletClone = gunBullet.clone();
 
+            //gun position
             const gunGroup_fromRotationZ = gunGroup.rotation.z;
             const gunGroup_toRotationZ = 0.3;
             const gunGroup_fromPositionX = gunGroup.position.x;
