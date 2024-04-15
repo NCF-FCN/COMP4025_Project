@@ -2,6 +2,14 @@
 2. Use "Temp-branch" as the push branch
 3. Remember to edit README.md
 
+## V0.24
+- Server(socket.io) and client (socket.io-client) installed, create a socket connection for mutiple player gaming
+- Changed file structure
+- Client and Server connection UI in side-bar
+- Client position is broadcasted to other clients on player move
+
+
+
 ## V0.23 
 - Added node.js server and socket
 - Added player model

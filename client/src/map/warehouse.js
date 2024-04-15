@@ -1,9 +1,14 @@
-function loadWarehouse() {
+
+//import * as THREE from 'three'
+import THREE from '../three_legacy'
+// import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from '../loaders/GLTFLoader';
+import { mapPrepare } from './common';
+import { game } from '../game';
+
+export function loadWarehouse() {
     //call the public variables (in index.html)
     mapPrepare();
-
-    const player = { height: 150, speed: 3.5, turnSpeed: Math.PI * 0.01 };
-    let keyboard = {};
 
     //scene attribute
     scene.name = "warehouse";
@@ -39,7 +44,7 @@ function loadWarehouse() {
     let gunBolt, gunBullet, gunBody, gunTrigger;
 
     // floor x1 -> scene
-    new THREE.GLTFLoader().load("models/warehouse/floor/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/warehouse/floor/scene.glb", function (gltf) {
         const floor = gltf.scene;
         // shader(floor);
         worldGroup.add(floor);
@@ -54,7 +59,7 @@ function loadWarehouse() {
     });
 
     //factory1 x1 -> scene
-    new THREE.GLTFLoader().load("models/warehouse/factory/factory1/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/warehouse/factory/factory1/scene.glb", function (gltf) {
         const factory1 = gltf.scene;
         shader(factory1);
         worldGroup.add(factory1);
@@ -70,7 +75,7 @@ function loadWarehouse() {
     });
 
     //factory2 x1 -> scene
-    new THREE.GLTFLoader().load("models/warehouse/factory/factory2/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/warehouse/factory/factory2/scene.glb", function (gltf) {
         const factory2 = gltf.scene;
         shader(factory2);
         worldGroup.add(factory2);
@@ -86,7 +91,7 @@ function loadWarehouse() {
     });
 
     //wall1 x2 -> wallGroup
-    new THREE.GLTFLoader().load("models/warehouse/wall/wall1/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/warehouse/wall/wall1/scene.glb", function (gltf) {
         const positions = [
             { x: -785, z: -1610 },
             { x: -930, z: -1580 }
@@ -113,7 +118,7 @@ function loadWarehouse() {
     });
 
     //wall2 x13 -> wallGroup
-    new THREE.GLTFLoader().load("models/warehouse/wall/wall2/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/warehouse/wall/wall2/scene.glb", function (gltf) {
         const positions = [
             { x: 910, z: -1456 },
             { x: 910, z: -1096 },
@@ -151,7 +156,7 @@ function loadWarehouse() {
     });
 
     //door x2 -> scene
-    new THREE.GLTFLoader().load("models/warehouse/door/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/warehouse/door/scene.glb", function (gltf) {
         const positions = [
             { x: -13, y: 95, z: 1550 },
             { x: -935, y: 95, z: -1290 }
@@ -180,7 +185,7 @@ function loadWarehouse() {
     });
 
     //container1 x2 -> scene
-    new THREE.GLTFLoader().load("models/warehouse/container/container1/scene.gltf", function (gltf) {
+    new GLTFLoader().load("models/warehouse/container/container1/scene.gltf", function (gltf) {
         const positions = [
             { x: 730, z: -1220 },
             { x: -750, z: 1180 }
@@ -203,7 +208,7 @@ function loadWarehouse() {
     });
 
     //container2 x2 -> scene
-    new THREE.GLTFLoader().load("models/warehouse/container/container2/scene.gltf", function (gltf) {
+    new GLTFLoader().load("models/warehouse/container/container2/scene.gltf", function (gltf) {
         const positions = [
             { x: -715, z: -440 },
             { x: 700, z: 860 }
@@ -234,7 +239,7 @@ function loadWarehouse() {
     });
 
     //pallet x3 -> smallObject1Group
-    new THREE.GLTFLoader().load("models/warehouse/pallet/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/warehouse/pallet/scene.glb", function (gltf) {
         const positions = [
             { x: -830, y: -5, z: 0 },
             { x: -830, y: -5, z: 170 },
@@ -262,7 +267,7 @@ function loadWarehouse() {
     });
 
     //box x4 -> smallObject1Group, smallObject2Group
-    new THREE.GLTFLoader().load("models/warehouse/box/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/warehouse/box/scene.glb", function (gltf) {
         const positions = [
             { x: -830, y: 22, z: 0 },
             { x: -830, y: 22, z: 140 },
@@ -293,7 +298,7 @@ function loadWarehouse() {
     });
 
     //shelves x3 -> smallObject2Group, smallObject3Group
-    new THREE.GLTFLoader().load("models/warehouse/shelves/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/warehouse/shelves/scene.glb", function (gltf) {
         const positions = [
             { x: -820, z: 420 },
             { x: -820, z: 705 },
@@ -323,7 +328,7 @@ function loadWarehouse() {
     });
 
     //standing_light x3 -> scene
-    new THREE.GLTFLoader().load("models/warehouse/standing_light/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/warehouse/standing_light/scene.glb", function (gltf) {
         gltf.scene.scale.set(40, 40, 40);
         // gltf.scene.castShadow = true;
 
@@ -356,7 +361,7 @@ function loadWarehouse() {
     });
 
     //safety_cone x2 -> scene
-    new THREE.GLTFLoader().load("models/warehouse/safety_cone/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/warehouse/safety_cone/scene.glb", function (gltf) {
         const positions = [
             { x: -200, z: -100 },
             { x: 120, z: 580 }
@@ -380,7 +385,7 @@ function loadWarehouse() {
     });
 
     //barrel x6 -> smallObject3Group
-    new THREE.GLTFLoader().load("models/warehouse/barrel/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/warehouse/barrel/scene.glb", function (gltf) {
         const positions = [
             { x: 820, z: -600 },
             { x: 820, z: -535 },
@@ -416,7 +421,7 @@ function loadWarehouse() {
     
 
     //load gun (pistol part)
-    new THREE.GLTFLoader().load("models/gun/glock/body.glb", function (gltf) {
+    new GLTFLoader().load("models/gun/glock/body.glb", function (gltf) {
         gunBody = gltf.scene;
         shader(gunBody);
         gunGroup.add(gunBody);
@@ -424,7 +429,7 @@ function loadWarehouse() {
         console.error(error);
     });
 
-    new THREE.GLTFLoader().load("models/gun/glock/bolt.glb", function (gltf) {
+    new GLTFLoader().load("models/gun/glock/bolt.glb", function (gltf) {
         gunBolt = gltf.scene;
         shader(gunBolt);
         gunGroup.add(gunBolt);
@@ -432,7 +437,7 @@ function loadWarehouse() {
         console.error(error);
     });
 
-    new THREE.GLTFLoader().load("models/gun/glock/trigger.glb", function (gltf) {
+    new GLTFLoader().load("models/gun/glock/trigger.glb", function (gltf) {
         gunTrigger = gltf.scene;
         shader(gunTrigger);
         gunGroup.add(gunTrigger);
@@ -441,7 +446,7 @@ function loadWarehouse() {
         console.error(error);
     });
 
-    new THREE.GLTFLoader().load("models/gun/bullet/scene.gltf", function (gltf) {
+    new GLTFLoader().load("models/gun/bullet/scene.gltf", function (gltf) {
         gunBullet = gltf.scene;
         gunBullet.scale.set(0.3, 0.3, 0.3);
         gunBullet.position.set(0, 140, 0);
@@ -451,7 +456,8 @@ function loadWarehouse() {
     });
 
     //camera position
-    camera.position.set(0, player.height, 100);
+    // todo: move to local player
+    camera.position.set(0, game.localPlayer.height, 100);
     // camera.rotation.y = -0.2;
 
     //directional light
@@ -524,52 +530,10 @@ function loadWarehouse() {
         requestAnimationFrame(animate);
 
         const time = Date.now() * 0.05;
-        const direction = new THREE.Vector3();
-        camera.getWorldDirection(direction);
 
-        if (keyboard[87]) { // W key
-            camera.position.addScaledVector(direction, player.speed);
-        }
-
-        if (keyboard[83]) { // S key
-            camera.position.addScaledVector(direction, -player.speed);
-        }
-
-        const right = new THREE.Vector3();
-        right.crossVectors(camera.up, direction).normalize();
-
-        if (keyboard[65]) { // A key
-            camera.position.addScaledVector(right, player.speed);
-        }
-
-        if (keyboard[68]) { // D key
-            camera.position.addScaledVector(right, -player.speed);
-        }
-
-        if (keyboard[75]) { // K key
-            camera.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), player.turnSpeed));
-        }
-
-        if (keyboard[186]) { // ; key
-            camera.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), -player.turnSpeed));
-        }
-
-        if (keyboard[79]) { // O key
-            camera.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), player.turnSpeed));
-        }
-
-        if (keyboard[76]) { // L key
-            camera.quaternion.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), -player.turnSpeed));
-        }
+        game.localPlayer.update(); // todo: move to game loop
     }
 
-    document.addEventListener('keydown', function onKeyDown(event) {
-        keyboard[event.keyCode] = true;
-    });
-
-    document.addEventListener('keyup', function onKeyUp(event) {
-        keyboard[event.keyCode] = false;
-    });
 
     animate()
 

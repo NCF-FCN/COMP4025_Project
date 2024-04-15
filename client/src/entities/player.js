@@ -1,5 +1,7 @@
+import { PlayerData } from "shared/src/playerData";
+import { GLTFLoader } from "../loaders/GLTFLoader";
 
-class Player {
+export class Player {
     constructor(scene, modelPath) {
         this.data = new PlayerData()
         this.scene = scene;
@@ -20,5 +22,3 @@ class Player {
         });
     }
 }
-
-export default Player;

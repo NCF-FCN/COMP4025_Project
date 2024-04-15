@@ -1,4 +1,12 @@
-function loadForest() {
+
+//import * as THREE from 'three'
+import THREE from '../three_legacy'
+// import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from '../loaders/GLTFLoader';
+
+import { mapPrepare } from './common';
+
+export function loadForest() {
     mapPrepare();
 
     //scene attribute
@@ -10,7 +18,7 @@ function loadForest() {
 
     // GLTF object
     // forest x1 -> scene
-    new THREE.GLTFLoader().load("models/forest/forest/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/forest/forest/scene.glb", function (gltf) {
         const forest = gltf.scene;
         shader(forest);
         scene.add(forest);
@@ -24,7 +32,7 @@ function loadForest() {
     });
 
     //lake x1 -> lakeGroup
-    new THREE.GLTFLoader().load("models/forest/lake/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/forest/lake/scene.glb", function (gltf) {
         const lake = gltf.scene;
         shader(lake);
         lakeGroup.add(lake);
@@ -39,7 +47,7 @@ function loadForest() {
     });
 
     //tree1 x1 -> lakeGroup
-    new THREE.GLTFLoader().load("models/forest/tree/tree1/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/forest/tree/tree1/scene.glb", function (gltf) {
         const tree1 = gltf.scene;
         shader(tree1);
         lakeGroup.add(tree1);
@@ -56,7 +64,7 @@ function loadForest() {
     });
 
     //tree2 x11 -> scene
-    new THREE.GLTFLoader().load("models/forest/tree/tree2/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/forest/tree/tree2/scene.glb", function (gltf) {
         const positions = [
             { x: -240, y: -5, z: -90 },
             { x: 50, y: 25, z: 200 },
@@ -91,7 +99,7 @@ function loadForest() {
     });
 
     //tree3 x1 -> lakeGroup
-    new THREE.GLTFLoader().load("models/forest/tree/tree3/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/forest/tree/tree3/scene.glb", function (gltf) {
         const tree3 = gltf.scene;
         shader(tree3);
         lakeGroup.add(tree3);
@@ -108,7 +116,7 @@ function loadForest() {
     });
 
     //rock x1 -> lakeGroup
-    new THREE.GLTFLoader().load("models/forest/rock/rock1/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/forest/rock/rock1/scene.glb", function (gltf) {
         const rock1 = gltf.scene;
         shader(rock1);
         lakeGroup.add(rock1);
@@ -124,7 +132,7 @@ function loadForest() {
     });
 
     //rock2 x1 -> scene
-    new THREE.GLTFLoader().load("models/forest/rock/rock2/scene.glb", function (gltf) {
+    new GLTFLoader().load("models/forest/rock/rock2/scene.glb", function (gltf) {
         const rock2 = gltf.scene;
         shader(rock2);
         scene.add(rock2);
