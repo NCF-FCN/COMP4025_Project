@@ -1,9 +1,7 @@
-
 // index.js is the entrypoint file for webpack
 
 //import * as THREE from 'three'
 import * as THREE from './three_legacy';
-
 import { loadForest } from './map/forest';
 import { loadWarehouse } from './map/warehouse';
 import { setupNetworkUI } from './ui/networkConnect';

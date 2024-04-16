@@ -8,7 +8,6 @@ import { game } from '../game';
 import { graphics } from '../graphics';
 
 export function loadWarehouse() {
-    //call the public variables (in index.html)
     mapPrepare();
 
     //scene attribute
@@ -418,48 +417,44 @@ export function loadWarehouse() {
         loadedModel++;
     });
 
-
-
-    
-
     //load gun (pistol part)
-    gltfLoader.load("models/gun/glock/body.glb", function (gltf) {
-        gunBody = gltf.scene;
-        graphics.shader(gunBody);
-        gunGroup.add(gunBody);
-    }, undefined, function (error) {
-        console.error(error);
-    });
+    // gltfLoader.load("models/gun/glock/body.glb", function (gltf) {
+    //     gunBody = gltf.scene;
+    //     graphics.shader(gunBody);
+    //     gunGroup.add(gunBody);
+    // }, undefined, function (error) {
+    //     console.error(error);
+    // });
 
-    gltfLoader.load("models/gun/glock/bolt.glb", function (gltf) {
-        gunBolt = gltf.scene;
-        graphics.shader(gunBolt);
-        gunGroup.add(gunBolt);
-    }, undefined, function (error) {
-        console.error(error);
-    });
+    // gltfLoader.load("models/gun/glock/bolt.glb", function (gltf) {
+    //     gunBolt = gltf.scene;
+    //     graphics.shader(gunBolt);
+    //     gunGroup.add(gunBolt);
+    // }, undefined, function (error) {
+    //     console.error(error);
+    // });
 
-    gltfLoader.load("models/gun/glock/trigger.glb", function (gltf) {
-        gunTrigger = gltf.scene;
-        graphics.shader(gunTrigger);
-        gunGroup.add(gunTrigger);
-        gunTrigger.position.set(-17, 112, 0);
-    }, undefined, function (error) {
-        console.error(error);
-    });
+    // gltfLoader.load("models/gun/glock/trigger.glb", function (gltf) {
+    //     gunTrigger = gltf.scene;
+    //     graphics.shader(gunTrigger);
+    //     gunGroup.add(gunTrigger);
+    //     gunTrigger.position.set(-17, 112, 0);
+    // }, undefined, function (error) {
+    //     console.error(error);
+    // });
 
-    gltfLoader.load("models/gun/bullet/scene.gltf", function (gltf) {
-        gunBullet = gltf.scene;
-        gunBullet.scale.set(0.3, 0.3, 0.3);
-        gunBullet.position.set(0, 140, 0);
-        gunBullet.rotation.y = Math.PI / 2;
-    }, undefined, function (error) {
-        console.error(error);
-    });
+    // gltfLoader.load("models/gun/bullet/scene.gltf", function (gltf) {
+    //     gunBullet = gltf.scene;
+    //     gunBullet.scale.set(0.3, 0.3, 0.3);
+    //     gunBullet.position.set(0, 140, 0);
+    //     gunBullet.rotation.y = Math.PI / 2;
+    // }, undefined, function (error) {
+    //     console.error(error);
+    // });
 
     //camera position
     // todo: move to local player
-    camera.position.set(0, game.localPlayer.height, 100);
+    // camera.position.set(0, game.localPlayer.height, 100);
     // camera.rotation.y = -0.2;
 
 
@@ -584,29 +579,24 @@ export function loadWarehouse() {
                     // console.log("Now: " + now + ", r_gunGroup_now" + r_gunGroup_now + ", r_gunGroup_progress: " + r_gunGroup_progress + ", gunGroup.rotation.z: " + gunGroup.rotation.z + ", gunGroup.position.x: " + gunGroup.position.x);
                 }
 
-                if (gunTrigger_progress <= 1) {
-                    gunTrigger.rotation.z = gunTrigger_fromRotationZ + (gunTrigger_toRotationZ - gunTrigger_fromRotationZ) * gunTrigger_progress;
-                } else {
-                    gunTrigger.rotation.z = gunTrigger_toRotationZ;
+                // if (gunTrigger_progress <= 1) {
+                //     gunTrigger.rotation.z = gunTrigger_fromRotationZ + (gunTrigger_toRotationZ - gunTrigger_fromRotationZ) * gunTrigger_progress;
+                // } else {
+                //     gunTrigger.rotation.z = gunTrigger_toRotationZ;
 
-                    if (!r_gunTrigger_now) {
-                        r_gunTrigger_now = Date.now();
-                    }
+                //     if (!r_gunTrigger_now) {
+                //         r_gunTrigger_now = Date.now();
+                //     }
 
-                    const r_gunTrigger_progress = (now - r_gunTrigger_now) / r_gunTrigger_duration;
+                //     const r_gunTrigger_progress = (now - r_gunTrigger_now) / r_gunTrigger_duration;
 
-                    if (r_gunTrigger_progress <= 1) {
-                        gunTrigger.rotation.z = gunTrigger_fromRotationZ + (gunTrigger_toRotationZ - gunTrigger_fromRotationZ) * (1 - r_gunTrigger_progress);
-                    } else {
-                        gunTrigger.rotation.z = gunTrigger_fromRotationZ;
-                        setTimeout(
-                            function () {
-                                isAnimating = false; //put this at the end of the longest part of the animation
-                            },
-                            1000
-                        );
-                    }
-                }
+                //     if (r_gunTrigger_progress <= 1) {
+                //         gunTrigger.rotation.z = gunTrigger_fromRotationZ + (gunTrigger_toRotationZ - gunTrigger_fromRotationZ) * (1 - r_gunTrigger_progress);
+                //     } else {
+                //         gunTrigger.rotation.z = gunTrigger_fromRotationZ;
+                //         isAnimating = false; //put this at the end of the longest part of the animation
+                //     }
+                // }
 
                 if (gunBolt_progress <= 1) {
                     gunBolt.position.x = gunBolt_fromPositionX + (gunBolt_toPositionX - gunBolt_fromPositionX) * gunBolt_progress;
@@ -624,6 +614,7 @@ export function loadWarehouse() {
                         gunBolt.position.x = gunBolt_fromPositionX + (gunBolt_toPositionX - gunBolt_fromPositionX) * (1 - r_gunBolt_progress);
                     } else {
                         gunBolt.position.x = gunBolt_fromPositionX;
+                        isAnimating = false; //put this at the end of the longest part of the animation
                     }
                 }
 

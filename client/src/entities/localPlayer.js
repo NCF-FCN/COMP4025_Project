@@ -1,4 +1,3 @@
-
 // Class for handling the local player, including controls
 
 import { game } from "../game";
@@ -19,12 +18,12 @@ export class LocalPlayer {
     get eyesForward() {
         return new THREE.Vector3(0, 0, -1).applyEuler(this.angles);
     }
-    
+
     // Ignore pitch, move on XZ plane
     get forward() {
         return new THREE.Vector3(0, 0, -1).applyAxisAngle(this.up, this.angles.y);
     }
-    
+
     get right() {
         return new THREE.Vector3(1, 0, 0).applyEuler(this.angles);
     }
@@ -38,7 +37,7 @@ export class LocalPlayer {
         // model is achored to eyes
         this.model = new THREE.Group();
         parentGroup.add(this.model);
-        
+
         // Create gun entity attached to local player
         this.gunEntity = new GunGlock(true);
         game.createEntity(this.gunEntity, this.model);
@@ -62,7 +61,6 @@ export class LocalPlayer {
         const lastAngles = this.angles.clone();
 
         // Input Position
-
         const forwardAmount = input.isDown(input.Binds.Forward) - input.isDown(input.Binds.Back);
         const rightAmount = input.isDown(input.Binds.Right) - input.isDown(input.Binds.Left);
 
@@ -70,31 +68,24 @@ export class LocalPlayer {
         this.position.addScaledVector(this.right, rightAmount * this.speed * deltaTime);
 
         // Input Angles
-
-        const pitchAmount = input.isDown(79) - input.isDown(76); // O - L keys
-        const yawAmount = input.isDown(75) - input.isDown(186);  // K - ; keys
-
-        this.angles.x += pitchAmount * this.turnSpeed * deltaTime;
-        this.angles.y += yawAmount * this.turnSpeed * deltaTime;
+        this.angles.x = input.pitch;
+        this.angles.y = input.yaw;
 
         // Apply to model
-
         const eyesPosition = this.position.clone().addScaledVector(this.up, this.height);
         // view model should be fixed to eyes
         this.model.position.set(eyesPosition.x, eyesPosition.y, eyesPosition.z);
         this.model.quaternion.setFromEuler(this.angles);
 
         // Apply to camera
-
         camera.position.set(eyesPosition.x, eyesPosition.y, eyesPosition.z);
         camera.quaternion.setFromEuler(this.angles);
 
         // Send to server
-        
         const positionChanged = lastPosition.distanceToSquared(this.position) > 0.001;
         const anglesChanged = (Math.abs(lastAngles.x - this.angles.x) + Math.abs(lastAngles.y - this.angles.y)) > 0.001;
 
-        if(positionChanged || anglesChanged) {
+        if (positionChanged || anglesChanged) {
             game.emit("move", {
                 position: this.position.toArray(),
                 angles: this.angles.toArray().slice(0, 3),

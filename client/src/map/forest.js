@@ -3,7 +3,6 @@
 import * as THREE from '../three_legacy'
 // import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { GLTFLoader } from '../loaders/GLTFLoader';
-
 import { mapPrepare } from './common';
 
 export function loadForest() {
@@ -161,7 +160,7 @@ export function loadForest() {
             shaderLoader.load('shader/fragment.glsl', function (fragmentShader) {
                 object.traverse(function (child) {
                     child.castShadow = true;
-                    
+
                     if (child.isMesh) {
                         child.material = new THREE.ShaderMaterial({
                             uniforms: {

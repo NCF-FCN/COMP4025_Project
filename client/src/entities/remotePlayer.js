@@ -1,9 +1,7 @@
-
 // Class for handling the local player, including controls
 
 import * as THREE from '../three_legacy'
 import { PlayerData } from "shared";
-
 import { game } from "../game";
 import { disposeNode } from "../map/common";
 
@@ -16,7 +14,7 @@ export class RemotePlayer {
         // model is achored to eyes
         this.model = new THREE.Group();
         parentGroup.add(this.model);
-        
+
         // Player model
         loadModel("models/player/scene.gltf", (model) => {
             model.scale.set(100, 100, 100);

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Gun Shooting Simulation</title>
@@ -42,8 +43,23 @@
             left: 0px;
         }
 
-        #switchMap {
-            padding: 20px;
+        #switchMap,
+        #loadAWP,
+        #loadGlock,
+        #loadM249 {
+            width: 120px;
+            height: fit-content;
+            padding: 15px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        #connectButton,
+        #disconnectButton {
+            width: 120px;
+            height: fit-content;
+            padding: 10px;
+            margin-top: 5px;
         }
 
         #sidebar input {
@@ -51,19 +67,24 @@
         }
     </style>
 </head>
+
 <body>
     <button id="toggleSidebar">&#9776;</button>
 
     <div id="sidebar">
         <button id="switchMap">Switch Map</button>
-        <button id="loadAWP">Load AWP</button>
-        <button id="loadGlock">Load Glock</button>
-        <button id="loadM249">Load M249</button>
-        <label>Server address:
-            <input type="text" id="websocketAddress" value="localhost:3000" />
-        </label>
-        <button id="connectButton">Connect</button>
-        <button id="disconnectButton" disabled="disabled">Disconnect</button>
+        <p>
+            <button id="loadAWP">Load AWP</button>
+            <button id="loadGlock">Load Glock</button>
+            <button id="loadM249">Load M249</button>
+        </p>
+        <P>
+            <label>Server address:
+                <input type="text" id="websocketAddress" value="localhost:3000" />
+            </label>
+            <button id="connectButton">Connect</button>
+            <button id="disconnectButton" disabled="disabled">Disconnect</button>
+        </P>
         <p id="connectStatus">Not connected.</p>
         <div id="debug-slider-template" style="display: none;">
             <p class="name"></p>
@@ -75,4 +96,5 @@
 
     <script src="main.js"></script>
 </body>
+
 </html>

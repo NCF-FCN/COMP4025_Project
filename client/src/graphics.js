@@ -24,7 +24,7 @@ class Graphics {
                 });
             });
         });
-  }
+    }
 }
 
 export const graphics = new Graphics();
