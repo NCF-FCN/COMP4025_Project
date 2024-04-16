@@ -7,7 +7,7 @@
  */
 
 //import * as THREE from 'three'
-import THREE from '../three_legacy'
+import * as THREE from '../three_legacy'
 
 export const GLTFLoader = ( function () {
 
@@ -301,15 +301,16 @@ export const GLTFLoader = ( function () {
 	 *
 	 */
 	function GLTFTextureDDSExtension() {
+		throw new Error("not implemented");
 
-		if ( ! THREE.DDSLoader ) {
+		// if ( ! THREE.DDSLoader ) {
 
-			throw new Error( 'THREE.GLTFLoader: Attempting to load .dds texture without importing THREE.DDSLoader' );
+		// 	throw new Error( 'THREE.GLTFLoader: Attempting to load .dds texture without importing THREE.DDSLoader' );
 
-		}
+		// }
 
-		this.name = EXTENSIONS.MSFT_TEXTURE_DDS;
-		this.ddsLoader = new THREE.DDSLoader();
+		// this.name = EXTENSIONS.MSFT_TEXTURE_DDS;
+		// this.ddsLoader = new THREE.DDSLoader();
 
 	}
 
@@ -511,7 +512,8 @@ export const GLTFLoader = ( function () {
 		this.name = EXTENSIONS.KHR_DRACO_MESH_COMPRESSION;
 		this.json = json;
 		this.dracoLoader = dracoLoader;
-		THREE.DRACOLoader.getDecoderModule();
+		// THREE.DRACOLoader.getDecoderModule();
+		throw new Error("not implemented");
 
 	}
 

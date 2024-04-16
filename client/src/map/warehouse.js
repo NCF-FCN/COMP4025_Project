@@ -1,10 +1,11 @@
 
 //import * as THREE from 'three'
-import THREE from '../three_legacy'
+import * as THREE from '../three_legacy'
 // import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { GLTFLoader } from '../loaders/GLTFLoader';
 import { mapPrepare } from './common';
 import { game } from '../game';
+import { graphics } from '../graphics';
 
 export function loadWarehouse() {
     //call the public variables (in index.html)
@@ -43,10 +44,11 @@ export function loadWarehouse() {
     // GLTF object
     let gunBolt, gunBullet, gunBody, gunTrigger;
 
+    const gltfLoader = new GLTFLoader();
     // floor x1 -> scene
-    new GLTFLoader().load("models/warehouse/floor/scene.glb", function (gltf) {
+    gltfLoader.load("models/warehouse/floor/scene.glb", function (gltf) {
         const floor = gltf.scene;
-        // shader(floor);
+        // graphics.shader(floor);
         worldGroup.add(floor);
 
         floor.scale.set(56, 1, 56);
@@ -59,9 +61,9 @@ export function loadWarehouse() {
     });
 
     //factory1 x1 -> scene
-    new GLTFLoader().load("models/warehouse/factory/factory1/scene.glb", function (gltf) {
+    gltfLoader.load("models/warehouse/factory/factory1/scene.glb", function (gltf) {
         const factory1 = gltf.scene;
-        shader(factory1);
+        graphics.shader(factory1);
         worldGroup.add(factory1);
 
         factory1.scale.set(200, 100, 100);
@@ -75,9 +77,9 @@ export function loadWarehouse() {
     });
 
     //factory2 x1 -> scene
-    new GLTFLoader().load("models/warehouse/factory/factory2/scene.glb", function (gltf) {
+    gltfLoader.load("models/warehouse/factory/factory2/scene.glb", function (gltf) {
         const factory2 = gltf.scene;
-        shader(factory2);
+        graphics.shader(factory2);
         worldGroup.add(factory2);
 
         factory2.scale.set(16, 17, 17);
@@ -91,7 +93,7 @@ export function loadWarehouse() {
     });
 
     //wall1 x2 -> wallGroup
-    new GLTFLoader().load("models/warehouse/wall/wall1/scene.glb", function (gltf) {
+    gltfLoader.load("models/warehouse/wall/wall1/scene.glb", function (gltf) {
         const positions = [
             { x: -785, z: -1610 },
             { x: -930, z: -1580 }
@@ -101,7 +103,7 @@ export function loadWarehouse() {
 
         positions.forEach((pos) => {
             let wall1 = gltf.scene.clone();
-            shader(wall1);
+            graphics.shader(wall1);
             wallGroup.add(wall1);
 
             wall1.position.set(pos.x, 130, pos.z);
@@ -118,7 +120,7 @@ export function loadWarehouse() {
     });
 
     //wall2 x13 -> wallGroup
-    new GLTFLoader().load("models/warehouse/wall/wall2/scene.glb", function (gltf) {
+    gltfLoader.load("models/warehouse/wall/wall2/scene.glb", function (gltf) {
         const positions = [
             { x: 910, z: -1456 },
             { x: 910, z: -1096 },
@@ -139,7 +141,7 @@ export function loadWarehouse() {
 
         positions.forEach((pos) => {
             let wall2 = gltf.scene.clone();
-            shader(wall2);
+            graphics.shader(wall2);
             wallGroup.add(wall2);
 
             wall2.position.set(pos.x, 5, pos.z);
@@ -156,7 +158,7 @@ export function loadWarehouse() {
     });
 
     //door x2 -> scene
-    new GLTFLoader().load("models/warehouse/door/scene.glb", function (gltf) {
+    gltfLoader.load("models/warehouse/door/scene.glb", function (gltf) {
         const positions = [
             { x: -13, y: 95, z: 1550 },
             { x: -935, y: 95, z: -1290 }
@@ -166,7 +168,7 @@ export function loadWarehouse() {
 
         positions.forEach((pos) => {
             let door = gltf.scene.clone();
-            shader(door);
+            graphics.shader(door);
             worldGroup.add(door);
 
             door.position.set(pos.x, pos.y, pos.z);
@@ -185,7 +187,7 @@ export function loadWarehouse() {
     });
 
     //container1 x2 -> scene
-    new GLTFLoader().load("models/warehouse/container/container1/scene.gltf", function (gltf) {
+    gltfLoader.load("models/warehouse/container/container1/scene.gltf", function (gltf) {
         const positions = [
             { x: 730, z: -1220 },
             { x: -750, z: 1180 }
@@ -195,7 +197,7 @@ export function loadWarehouse() {
 
         positions.forEach((pos) => {
             let container1 = gltf.scene.clone();
-            shader(container1);
+            graphics.shader(container1);
             worldGroup.add(container1);
 
             container1.position.set(pos.x, 0, pos.z);
@@ -208,7 +210,7 @@ export function loadWarehouse() {
     });
 
     //container2 x2 -> scene
-    new GLTFLoader().load("models/warehouse/container/container2/scene.gltf", function (gltf) {
+    gltfLoader.load("models/warehouse/container/container2/scene.gltf", function (gltf) {
         const positions = [
             { x: -715, z: -440 },
             { x: 700, z: 860 }
@@ -218,7 +220,7 @@ export function loadWarehouse() {
 
         positions.forEach((pos) => {
             let container2 = gltf.scene.clone();
-            shader(container2);
+            graphics.shader(container2);
             worldGroup.add(container2);
 
             container2.position.set(pos.x, 0, pos.z);
@@ -239,7 +241,7 @@ export function loadWarehouse() {
     });
 
     //pallet x3 -> smallObject1Group
-    new GLTFLoader().load("models/warehouse/pallet/scene.glb", function (gltf) {
+    gltfLoader.load("models/warehouse/pallet/scene.glb", function (gltf) {
         const positions = [
             { x: -830, y: -5, z: 0 },
             { x: -830, y: -5, z: 170 },
@@ -250,7 +252,7 @@ export function loadWarehouse() {
 
         positions.forEach((pos) => {
             let pallet = gltf.scene.clone();
-            shader(pallet);
+            graphics.shader(pallet);
             smallObject1Group.add(pallet);
 
             pallet.position.set(pos.x, pos.y, pos.z);
@@ -267,7 +269,7 @@ export function loadWarehouse() {
     });
 
     //box x4 -> smallObject1Group, smallObject2Group
-    new GLTFLoader().load("models/warehouse/box/scene.glb", function (gltf) {
+    gltfLoader.load("models/warehouse/box/scene.glb", function (gltf) {
         const positions = [
             { x: -830, y: 22, z: 0 },
             { x: -830, y: 22, z: 140 },
@@ -279,7 +281,7 @@ export function loadWarehouse() {
 
         positions.forEach((pos) => {
             let box = gltf.scene.clone();
-            shader(box);
+            graphics.shader(box);
 
             if (pos.z < 200) {
                 smallObject1Group.add(box);
@@ -298,7 +300,7 @@ export function loadWarehouse() {
     });
 
     //shelves x3 -> smallObject2Group, smallObject3Group
-    new GLTFLoader().load("models/warehouse/shelves/scene.glb", function (gltf) {
+    gltfLoader.load("models/warehouse/shelves/scene.glb", function (gltf) {
         const positions = [
             { x: -820, z: 420 },
             { x: -820, z: 705 },
@@ -309,7 +311,7 @@ export function loadWarehouse() {
 
         positions.forEach((pos) => {
             let shelves = gltf.scene.clone();
-            shader(shelves);
+            graphics.shader(shelves);
 
             if (pos.x < 0) {
                 smallObject2Group.add(shelves);
@@ -328,24 +330,24 @@ export function loadWarehouse() {
     });
 
     //standing_light x3 -> scene
-    new GLTFLoader().load("models/warehouse/standing_light/scene.glb", function (gltf) {
+    gltfLoader.load("models/warehouse/standing_light/scene.glb", function (gltf) {
         gltf.scene.scale.set(40, 40, 40);
         // gltf.scene.castShadow = true;
 
         let standing_light = gltf.scene.clone();
-        shader(standing_light);
+        graphics.shader(standing_light);
         worldGroup.add(standing_light);
         standing_light.position.set(-510, 130, -70);
         standing_light.rotation.y = 0.7;
 
         standing_light = gltf.scene.clone();
-        shader(standing_light);
+        graphics.shader(standing_light);
         worldGroup.add(standing_light);
         standing_light.position.set(510, 130, 510);
         standing_light.rotation.y = Math.PI + 0.32;
 
         standing_light = gltf.scene.clone();
-        shader(standing_light);
+        graphics.shader(standing_light);
         worldGroup.add(standing_light);
         standing_light.position.set(640, 412, -980);
         standing_light.rotation.y = Math.PI / 2 - 0.3;
@@ -361,7 +363,7 @@ export function loadWarehouse() {
     });
 
     //safety_cone x2 -> scene
-    new GLTFLoader().load("models/warehouse/safety_cone/scene.glb", function (gltf) {
+    gltfLoader.load("models/warehouse/safety_cone/scene.glb", function (gltf) {
         const positions = [
             { x: -200, z: -100 },
             { x: 120, z: 580 }
@@ -371,7 +373,7 @@ export function loadWarehouse() {
 
         positions.forEach((pos) => {
             let safety_cone = gltf.scene.clone();
-            shader(safety_cone);
+            graphics.shader(safety_cone);
             scene.add(safety_cone);
 
             safety_cone.position.set(pos.x, 0, pos.z);
@@ -385,7 +387,7 @@ export function loadWarehouse() {
     });
 
     //barrel x6 -> smallObject3Group
-    new GLTFLoader().load("models/warehouse/barrel/scene.glb", function (gltf) {
+    gltfLoader.load("models/warehouse/barrel/scene.glb", function (gltf) {
         const positions = [
             { x: 820, z: -600 },
             { x: 820, z: -535 },
@@ -399,7 +401,7 @@ export function loadWarehouse() {
 
         positions.forEach((pos) => {
             let barrel = gltf.scene.clone();
-            shader(barrel);
+            graphics.shader(barrel);
             smallObject3Group.add(barrel);
 
             barrel.position.set(pos.x, pos.y || 17, pos.z);
@@ -421,32 +423,32 @@ export function loadWarehouse() {
     
 
     //load gun (pistol part)
-    new GLTFLoader().load("models/gun/glock/body.glb", function (gltf) {
+    gltfLoader.load("models/gun/glock/body.glb", function (gltf) {
         gunBody = gltf.scene;
-        shader(gunBody);
+        graphics.shader(gunBody);
         gunGroup.add(gunBody);
     }, undefined, function (error) {
         console.error(error);
     });
 
-    new GLTFLoader().load("models/gun/glock/bolt.glb", function (gltf) {
+    gltfLoader.load("models/gun/glock/bolt.glb", function (gltf) {
         gunBolt = gltf.scene;
-        shader(gunBolt);
+        graphics.shader(gunBolt);
         gunGroup.add(gunBolt);
     }, undefined, function (error) {
         console.error(error);
     });
 
-    new GLTFLoader().load("models/gun/glock/trigger.glb", function (gltf) {
+    gltfLoader.load("models/gun/glock/trigger.glb", function (gltf) {
         gunTrigger = gltf.scene;
-        shader(gunTrigger);
+        graphics.shader(gunTrigger);
         gunGroup.add(gunTrigger);
         gunTrigger.position.set(-17, 112, 0);
     }, undefined, function (error) {
         console.error(error);
     });
 
-    new GLTFLoader().load("models/gun/bullet/scene.gltf", function (gltf) {
+    gltfLoader.load("models/gun/bullet/scene.gltf", function (gltf) {
         gunBullet = gltf.scene;
         gunBullet.scale.set(0.3, 0.3, 0.3);
         gunBullet.position.set(0, 140, 0);
@@ -460,11 +462,6 @@ export function loadWarehouse() {
     camera.position.set(0, game.localPlayer.height, 100);
     // camera.rotation.y = -0.2;
 
-    //directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff);
-    directionalLight.position.set(50, 100, 100);
-    // directionalLight.castShadow = true;
-    scene.add(directionalLight);
 
     //spotlight
     function spotlight(posX, posY, posZ, tarX, tarY, tarZ) {
@@ -476,7 +473,7 @@ export function loadWarehouse() {
         // spotLight.shadow.camera.far = 1000;
         // spotLight.shadow.mapSize.width = 1024;
         // spotLight.shadow.mapSize.height = 1024;
-        shader(spotLight);
+        graphics.shader(spotLight);
         scene.add(spotLight);
 
         // var helper = new THREE.CameraHelper(spotLight.shadow.camera);
@@ -490,7 +487,7 @@ export function loadWarehouse() {
         // spotLight.shadow.camera.far = 1000;
         // spotLight.shadow.mapSize.width = 1024;
         // spotLight.shadow.mapSize.height = 1024;
-        shader(spotLight);
+        graphics.shader(spotLight);
         scene.add(spotLight);
 
         // var helper = new THREE.CameraHelper(spotLight.shadow.camera);
@@ -500,42 +497,6 @@ export function loadWarehouse() {
     spotlight(-510, 170, -70, 0, 170, 530);
     spotlight(510, 170, 510, 200, 170, -1000);
     spotlight(640, 412, -980, 200, 412, -1100);
-
-    //shader
-    function shader(object) {
-        const shaderLoader = new THREE.FileLoader();
-
-        shaderLoader.load('shader/vertex.glsl', function (vertexShader) {
-            shaderLoader.load('shader/fragment.glsl', function (fragmentShader) {
-                object.traverse(function (child) {
-                    child.castShadow = true;
-
-                    if (child.isMesh) {
-                        child.material = new THREE.ShaderMaterial({
-                            uniforms: {
-                                lightSrc: { type: "v3", value: directionalLight.position },
-                                texture: { type: "t", value: child.material.map }
-                            },
-                            vertexShader: vertexShader,
-                            fragmentShader: fragmentShader
-                        });
-                    }
-                });
-            });
-        });
-    }
-
-    // gun animation
-    function animate() {
-        requestAnimationFrame(animate);
-
-        const time = Date.now() * 0.05;
-
-        game.localPlayer.update(); // todo: move to game loop
-    }
-
-
-    animate()
 
     let isAnimating = false;
 
@@ -673,13 +634,4 @@ export function loadWarehouse() {
         }
     }
     document.addEventListener('keydown', gunFire);
-
-    //render
-    const render = function () {
-        requestAnimationFrame(render);
-        // controls.update();
-        renderer.render(scene, camera);
-    };
-
-    render();
 }

@@ -19,7 +19,7 @@ class Input {
 	pressedButtons = {};
 	
 	isDown(code) {
-        return this.pressedButtons[code];
+        return this.pressedButtons[code] ? 1 : 0;
     }
 }
 

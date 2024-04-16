@@ -1,13 +1,14 @@
 
 export class PlayerData {
-    constructor(position, health) {
-        this.name = "UNNAMED";
+    constructor({ id, position, angles, health }) {
+        this.id = id;
         this.position = position;
+        this.angles = angles;
         this.health = health;
     }
 
     // Helper method to display in console
     toString() {
-        return `PlayerData[${this.name}] { position = ${this.position}, health = ${this.health} }`;
+        return `PlayerData[${this.id}] { position = ${this.position}, position = ${this.angles}, health = ${this.health} }`;
     }
 }

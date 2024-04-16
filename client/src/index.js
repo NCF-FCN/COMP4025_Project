@@ -2,7 +2,7 @@
 // index.js is the entrypoint file for webpack
 
 //import * as THREE from 'three'
-import THREE from './three_legacy';
+import * as THREE from './three_legacy';
 
 import { loadForest } from './map/forest';
 import { loadWarehouse } from './map/warehouse';
@@ -44,12 +44,6 @@ document.getElementById("switchMap").addEventListener("click", function () {
       loadForest();
   }
 });
-
-// test import from shared project
-const { PlayerData } = require('shared')
-console.log(PlayerData)
-const playerData = new PlayerData(null, 123);
-console.log(playerData.toString())
 
 //load warehouse first
 loadWarehouse();

@@ -298,15 +298,16 @@ THREE.GLTFLoader = ( function () {
 	 *
 	 */
 	function GLTFTextureDDSExtension() {
+		throw new Error("not implemented");
 
-		if ( ! THREE.DDSLoader ) {
+		// if ( ! THREE.DDSLoader ) {
 
-			throw new Error( 'THREE.GLTFLoader: Attempting to load .dds texture without importing THREE.DDSLoader' );
+		// 	throw new Error( 'THREE.GLTFLoader: Attempting to load .dds texture without importing THREE.DDSLoader' );
 
-		}
+		// }
 
-		this.name = EXTENSIONS.MSFT_TEXTURE_DDS;
-		this.ddsLoader = new THREE.DDSLoader();
+		// this.name = EXTENSIONS.MSFT_TEXTURE_DDS;
+		// this.ddsLoader = new THREE.DDSLoader();
 
 	}
 
@@ -508,7 +509,8 @@ THREE.GLTFLoader = ( function () {
 		this.name = EXTENSIONS.KHR_DRACO_MESH_COMPRESSION;
 		this.json = json;
 		this.dracoLoader = dracoLoader;
-		THREE.DRACOLoader.getDecoderModule();
+		// THREE.DRACOLoader.getDecoderModule();
+		throw new Error("not implemented");
 
 	}
 

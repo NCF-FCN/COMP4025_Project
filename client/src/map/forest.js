@@ -1,6 +1,6 @@
 
 //import * as THREE from 'three'
-import THREE from '../three_legacy'
+import * as THREE from '../three_legacy'
 // import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { GLTFLoader } from '../loaders/GLTFLoader';
 

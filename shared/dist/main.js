@@ -2,10 +2,10 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/player_data.js":
-/*!****************************!*\
-  !*** ./src/player_data.js ***!
-  \****************************/
+/***/ "./src/playerData.js":
+/*!***************************!*\
+  !*** ./src/playerData.js ***!
+  \***************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -14,15 +14,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 
 class PlayerData {
-    constructor(position, health) {
-        this.name = "UNNAMED";
+    constructor({ id, position, angles, health }) {
+        this.id = id;
         this.position = position;
+        this.angles = angles;
         this.health = health;
     }
 
     // Helper method to display in console
     toString() {
-        return `PlayerData[${this.name}] { position = ${this.position}, health = ${this.health} }`;
+        return `PlayerData[${this.id}] { position = ${this.position}, position = ${this.angles}, health = ${this.health} }`;
     }
 }
 
@@ -93,9 +94,9 @@ var __webpack_exports__ = {};
   \**********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   PlayerData: () => (/* reexport safe */ _player_data__WEBPACK_IMPORTED_MODULE_0__.PlayerData)
+/* harmony export */   PlayerData: () => (/* reexport safe */ _playerData__WEBPACK_IMPORTED_MODULE_0__.PlayerData)
 /* harmony export */ });
-/* harmony import */ var _player_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player_data */ "./src/player_data.js");
+/* harmony import */ var _playerData__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./playerData */ "./src/playerData.js");
 // this is the main file of the shared project
 
 // re-export all types so they are visisble from other projects

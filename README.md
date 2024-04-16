@@ -3,11 +3,11 @@
 3. Remember to edit README.md
 
 ## V0.24
-- Server(socket.io) and client (socket.io-client) installed, create a socket connection for mutiple player gaming
-- Changed file structure
-- Client and Server connection UI in side-bar
-- Client position is broadcasted to other clients on player move
-
+- Attached gun to player model (POV and world)
+- Added remote player display
+- Added server-controlled respawn of players (local and remote)
+- Added player model
+- Added LocalPlayer model
 
 
 ## V0.23 

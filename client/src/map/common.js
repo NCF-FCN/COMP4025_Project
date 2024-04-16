@@ -1,6 +1,7 @@
 
 //import * as THREE from 'three'
-import THREE from '../three_legacy'
+import { game } from '../game';
+import * as THREE from '../three_legacy'
 
 export function mapPrepare() {
   //clean the scene
@@ -28,10 +29,12 @@ export function mapPrepare() {
   // renderer.shadowMap.enabled = true;
   // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   document.body.appendChild(renderer.domElement);
+
+  game.prepareWorld();
 }
 
 //free up the RAM
-function disposeNode(node) {
+export function disposeNode(node) {
   if (node instanceof THREE.Mesh) {
       if (node.geometry) node.geometry.dispose();
 

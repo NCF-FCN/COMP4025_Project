@@ -1,6 +1,7 @@
 import { game } from "../game";
 
 export function setupNetworkUI() {
+    document.getElementById("websocketAddress").value = window.location.host;
     document.getElementById("connectButton").addEventListener("click", function () {
         const address = document.getElementById("websocketAddress").value.trim();
         console.log("[UI] Connecting to", address)
