@@ -2,10 +2,22 @@
 2. Use "Temp-branch" as the push branch
 3. Remember to edit README.md
 
+## V0.27
+- Modified player attributes (mp, speed, position, jump)
+- Function fire() renamed to canFire()
+- Function showFire() renamed to shotAnimation()
+- Added randomness forward to the bullet
+- Imported bullet hit object sound, gun Shell hit ground sound
+- Added gun Shell hit ground sound to shotAnimation()
+- Added function getMouseLocked() to handle guns, which will only fire when the mouse cursor is locked
+
+
 ## V0.26
 - Gun implementation added to player hands
 - Gun shooting animation
 - Added User HP, running, MP small UI
+- README.md updated
+
 
 ## V0.25
 - Delete temp-branch
@@ -30,10 +42,11 @@
 - Added player model
 
 
-## V0.22 beta
+## V0.22
 - Deleted Trace back control
 - Added keyboard control to "warehouse" map
 - Added "worldGroup" to rotate "warehouse" map
+
 
 ## V0.21
 - Modified the properties of "shelves"

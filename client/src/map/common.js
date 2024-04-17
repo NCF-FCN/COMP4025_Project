@@ -26,8 +26,6 @@ export function mapPrepare() {
     // Renderer
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.gammaOutput = true;
-    // renderer.shadowMap.enabled = true;
-    // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
 
     game.prepareWorld();

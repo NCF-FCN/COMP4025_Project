@@ -1,5 +1,4 @@
 // Class for handles input to the game, allows for querying pressed buttons 
-
 class Input {
 	MouseButtons = {
 		MouseLeft: 'MouseLeft',
@@ -22,7 +21,7 @@ class Input {
 	mouseSensitivity = 0.002;
 	pitch = 0;
 	yaw = 0;
-	mouseLocked = true;
+	mouseLocked = false;
 
 	isDown(code) {
 		return this.pressedButtons[code] ? 1 : 0;
@@ -37,11 +36,11 @@ class Input {
 	}
 
 	mouseEventButtonToName(button) {
-    switch(button) {
-        case 0: return this.MouseButtons.MouseLeft;
-        case 2: return this.MouseButtons.MouseRight;
-        default: return null;
-    }
+		switch (button) {
+			case 0: return this.MouseButtons.MouseLeft;
+			case 2: return this.MouseButtons.MouseRight;
+			default: return null;
+		}
 	}
 
 	handleMouseDown(event) {
@@ -77,6 +76,10 @@ class Input {
 		} else {
 			document.exitPointerLock();
 		}
+	}
+
+	getMouseLocked(){
+		return this.mouseLocked;
 	}
 
 	initialize() {

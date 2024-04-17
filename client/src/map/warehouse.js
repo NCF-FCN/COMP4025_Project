@@ -1,7 +1,4 @@
-
-//import * as THREE from 'three'
 import * as THREE from '../three_legacy'
-// import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { GLTFLoader } from '../loaders/GLTFLoader';
 import { mapPrepare } from './common';
 import { game } from '../game';
@@ -10,7 +7,6 @@ import { graphics } from '../graphics';
 const developmentModeLoadMinimum = true;
 
 export function loadWarehouse() {
-    //call the public variables (in index.html)
     mapPrepare();
 
     //scene attribute
@@ -18,24 +14,19 @@ export function loadWarehouse() {
 
     //wallGroup
     const wallGroup = new THREE.Group();
+    scene.add(wallGroup);
 
     //smallObject1Group
     const smallObject1Group = new THREE.Group();
+    scene.add(smallObject1Group);
 
     //smallObject2Group
     const smallObject2Group = new THREE.Group();
+    scene.add(smallObject2Group);
 
     //smallObject3Group
     const smallObject3Group = new THREE.Group();
-
-    //worldGroup
-    const worldGroup = new THREE.Group();
-    scene.add(worldGroup);
-    worldGroup.add(wallGroup);
-    worldGroup.add(smallObject1Group);
-    worldGroup.add(smallObject2Group);
-    worldGroup.add(smallObject3Group);
-    worldGroup.rotation.y = -Math.PI / 2;
+    scene.add(smallObject3Group);
 
     //gunGroup
     const gunGroup = new THREE.Group();
@@ -50,8 +41,7 @@ export function loadWarehouse() {
     // floor x1 -> scene
     gltfLoader.load("models/warehouse/floor/scene.glb", function (gltf) {
         const floor = gltf.scene;
-        // graphics.shader(floor);
-        worldGroup.add(floor);
+        scene.add(floor);
 
         floor.scale.set(56, 1, 56);
         floor.rotation.y = Math.PI / 2;
@@ -62,29 +52,28 @@ export function loadWarehouse() {
         loadedModel++;
     });
 
-    //factory1 x1 -> scene
-    gltfLoader.load("models/warehouse/factory/factory1/scene.glb", function (gltf) {
-        const factory1 = gltf.scene;
-        graphics.shader(factory1);
-        worldGroup.add(factory1);
+    if (!developmentModeLoadMinimum) {
+        //factory1 x1 -> scene
+        gltfLoader.load("models/warehouse/factory/factory1/scene.glb", function (gltf) {
+            const factory1 = gltf.scene;
+            graphics.shader(factory1);
+            scene.add(factory1);
 
-        factory1.scale.set(200, 100, 100);
-        factory1.position.set(103, 0, -2250);
-        factory1.rotation.y = - Math.PI / 2;
+            factory1.scale.set(200, 100, 100);
+            factory1.position.set(103, 0, -2250);
+            factory1.rotation.y = - Math.PI / 2;
 
-        loadedModel++;
-    }, undefined, function (error) {
-        console.error(error);
-        loadedModel++;
-    });
-
-    if(!developmentModeLoadMinimum) {
+            loadedModel++;
+        }, undefined, function (error) {
+            console.error(error);
+            loadedModel++;
+        });
 
         //factory2 x1 -> scene
         gltfLoader.load("models/warehouse/factory/factory2/scene.glb", function (gltf) {
             const factory2 = gltf.scene;
             graphics.shader(factory2);
-            worldGroup.add(factory2);
+            scene.add(factory2);
 
             factory2.scale.set(16, 17, 17);
             factory2.position.set(-1330, 190, 180);
@@ -173,7 +162,7 @@ export function loadWarehouse() {
             positions.forEach((pos) => {
                 let door = gltf.scene.clone();
                 graphics.shader(door);
-                worldGroup.add(door);
+                scene.add(door);
 
                 door.position.set(pos.x, pos.y, pos.z);
 
@@ -202,7 +191,7 @@ export function loadWarehouse() {
             positions.forEach((pos) => {
                 let container1 = gltf.scene.clone();
                 graphics.shader(container1);
-                worldGroup.add(container1);
+                scene.add(container1);
 
                 container1.position.set(pos.x, 0, pos.z);
             });
@@ -225,7 +214,7 @@ export function loadWarehouse() {
             positions.forEach((pos) => {
                 let container2 = gltf.scene.clone();
                 graphics.shader(container2);
-                worldGroup.add(container2);
+                scene.add(container2);
 
                 container2.position.set(pos.x, 0, pos.z);
 
@@ -340,25 +329,21 @@ export function loadWarehouse() {
 
             let standing_light = gltf.scene.clone();
             graphics.shader(standing_light);
-            worldGroup.add(standing_light);
+            scene.add(standing_light);
             standing_light.position.set(-510, 130, -70);
             standing_light.rotation.y = 0.7;
 
             standing_light = gltf.scene.clone();
             graphics.shader(standing_light);
-            worldGroup.add(standing_light);
+            scene.add(standing_light);
             standing_light.position.set(510, 130, 510);
             standing_light.rotation.y = Math.PI + 0.32;
 
             standing_light = gltf.scene.clone();
             graphics.shader(standing_light);
-            worldGroup.add(standing_light);
+            scene.add(standing_light);
             standing_light.position.set(640, 412, -980);
             standing_light.rotation.y = Math.PI / 2 - 0.3;
-
-            // standing_light = gltf.scene.clone();
-            // scene.add(standing_light);
-            // standing_light.position.set(-190, 130, 400);
 
             loadedModel++;
         }, undefined, function (error) {
@@ -423,76 +408,21 @@ export function loadWarehouse() {
         });
     }
 
-    //load gun (pistol part)
-    gltfLoader.load("models/gun/glock/body.glb", function (gltf) {
-        gunBody = gltf.scene;
-        graphics.shader(gunBody);
-        gunGroup.add(gunBody);
-    }, undefined, function (error) {
-        console.error(error);
-    });
-
-    gltfLoader.load("models/gun/glock/bolt.glb", function (gltf) {
-        gunBolt = gltf.scene;
-        graphics.shader(gunBolt);
-        gunGroup.add(gunBolt);
-    }, undefined, function (error) {
-        console.error(error);
-    });
-
-    gltfLoader.load("models/gun/glock/trigger.glb", function (gltf) {
-        gunTrigger = gltf.scene;
-        graphics.shader(gunTrigger);
-        gunGroup.add(gunTrigger);
-        gunTrigger.position.set(-17, 112, 0);
-    }, undefined, function (error) {
-        console.error(error);
-    });
-
-    gltfLoader.load("models/gun/bullet/scene.gltf", function (gltf) {
-        gunBullet = gltf.scene;
-        gunBullet.scale.set(0.3, 0.3, 0.3);
-        gunBullet.position.set(0, 140, 0);
-        gunBullet.rotation.y = Math.PI / 2;
-    }, undefined, function (error) {
-        console.error(error);
-    });
-
-    //camera position
-    // todo: move to local player
-    camera.position.set(0, game.localPlayer.height, 100);
-    // camera.rotation.y = -0.2;
-
-
     //spotlight
     function spotlight(posX, posY, posZ, tarX, tarY, tarZ) {
         let spotLight = new THREE.SpotLight(0xffffff, 0.6, 0, Math.PI / 5, 0.1);
         spotLight.position.set(posX, posY, posZ);
         spotLight.target.position.set(tarX, tarY, tarZ);
         spotLight.target.updateMatrixWorld(true);
-        // spotLight.castShadow = true;
-        // spotLight.shadow.camera.far = 1000;
-        // spotLight.shadow.mapSize.width = 1024;
-        // spotLight.shadow.mapSize.height = 1024;
         graphics.shader(spotLight);
         scene.add(spotLight);
-
-        // var helper = new THREE.CameraHelper(spotLight.shadow.camera);
-        // scene.add(helper);
 
         spotLight = new THREE.SpotLight(0xffffff, 1, 0, Math.PI / 7, 0.3);
         spotLight.position.set(posX, posY, posZ);
         spotLight.target.position.set(tarX, tarY, tarZ);
         spotLight.target.updateMatrixWorld(true);
-        // spotLight.castShadow = true;
-        // spotLight.shadow.camera.far = 1000;
-        // spotLight.shadow.mapSize.width = 1024;
-        // spotLight.shadow.mapSize.height = 1024;
         graphics.shader(spotLight);
         scene.add(spotLight);
-
-        // var helper = new THREE.CameraHelper(spotLight.shadow.camera);
-        // scene.add(helper);
     }
 
     spotlight(-510, 170, -70, 0, 170, 530);
@@ -585,29 +515,24 @@ export function loadWarehouse() {
                     // console.log("Now: " + now + ", r_gunGroup_now" + r_gunGroup_now + ", r_gunGroup_progress: " + r_gunGroup_progress + ", gunGroup.rotation.z: " + gunGroup.rotation.z + ", gunGroup.position.x: " + gunGroup.position.x);
                 }
 
-                if (gunTrigger_progress <= 1) {
-                    gunTrigger.rotation.z = gunTrigger_fromRotationZ + (gunTrigger_toRotationZ - gunTrigger_fromRotationZ) * gunTrigger_progress;
-                } else {
-                    gunTrigger.rotation.z = gunTrigger_toRotationZ;
+                // if (gunTrigger_progress <= 1) {
+                //     gunTrigger.rotation.z = gunTrigger_fromRotationZ + (gunTrigger_toRotationZ - gunTrigger_fromRotationZ) * gunTrigger_progress;
+                // } else {
+                //     gunTrigger.rotation.z = gunTrigger_toRotationZ;
 
-                    if (!r_gunTrigger_now) {
-                        r_gunTrigger_now = Date.now();
-                    }
+                //     if (!r_gunTrigger_now) {
+                //         r_gunTrigger_now = Date.now();
+                //     }
 
-                    const r_gunTrigger_progress = (now - r_gunTrigger_now) / r_gunTrigger_duration;
+                //     const r_gunTrigger_progress = (now - r_gunTrigger_now) / r_gunTrigger_duration;
 
-                    if (r_gunTrigger_progress <= 1) {
-                        gunTrigger.rotation.z = gunTrigger_fromRotationZ + (gunTrigger_toRotationZ - gunTrigger_fromRotationZ) * (1 - r_gunTrigger_progress);
-                    } else {
-                        gunTrigger.rotation.z = gunTrigger_fromRotationZ;
-                        setTimeout(
-                            function () {
-                                isAnimating = false; //put this at the end of the longest part of the animation
-                            },
-                            1000
-                        );
-                    }
-                }
+                //     if (r_gunTrigger_progress <= 1) {
+                //         gunTrigger.rotation.z = gunTrigger_fromRotationZ + (gunTrigger_toRotationZ - gunTrigger_fromRotationZ) * (1 - r_gunTrigger_progress);
+                //     } else {
+                //         gunTrigger.rotation.z = gunTrigger_fromRotationZ;
+                //         isAnimating = false; //put this at the end of the longest part of the animation
+                //     }
+                // }
 
                 if (gunBolt_progress <= 1) {
                     gunBolt.position.x = gunBolt_fromPositionX + (gunBolt_toPositionX - gunBolt_fromPositionX) * gunBolt_progress;
@@ -625,6 +550,7 @@ export function loadWarehouse() {
                         gunBolt.position.x = gunBolt_fromPositionX + (gunBolt_toPositionX - gunBolt_fromPositionX) * (1 - r_gunBolt_progress);
                     } else {
                         gunBolt.position.x = gunBolt_fromPositionX;
+                        isAnimating = false; //put this at the end of the longest part of the animation
                     }
                 }
 

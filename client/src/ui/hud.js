@@ -1,7 +1,7 @@
 function setBar(id, progress) {
     progress = Math.max(0, Math.min(1, progress));
     const bar = document.getElementById(id).querySelector(".progress-bar");
-    bar.style.width = `${progress*100}%`;
+    bar.style.width = `${progress * 100}%`;
 }
 
 export function setHudHP(hp) {
@@ -11,5 +11,5 @@ export function setHudHP(hp) {
 
 export function setHudMP(mp) {
     document.getElementById("hud-text-mp").innerText = Math.round(mp);
-    setBar("hud-bar-mp", mp / 100);
+    setBar("hud-bar-mp", mp / 200);
 }

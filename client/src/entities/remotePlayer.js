@@ -1,10 +1,8 @@
 // Class for handling the local player, including controls
-
 import * as THREE from '../three_legacy'
 import { PlayerData } from "shared";
 import { game } from "../game";
 import { disposeNode } from "../map/common";
-
 import { PlayerGun } from './playerGun';
 import { GunGlock } from './guns/glock';
 
@@ -44,7 +42,7 @@ export class RemotePlayer {
         this.model.position.set(...position);
         this.model.quaternion.setFromEuler(new THREE.Euler(0, angles[1], 0, 'YXZ'));
     }
-    
+
     weaponFire() {
         this.gunEntity.remoteFire();
     }

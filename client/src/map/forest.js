@@ -176,13 +176,6 @@ export function loadForest() {
         });
     }
 
-    // Camera position
-    // camera.position.x = 900;
-    // camera.position.y = 600;
-    // camera.position.z = 900;
-    camera.position.y = 200;
-    camera.position.z = 900;
-
     // render function
     const render = function () {
         requestAnimationFrame(render);
