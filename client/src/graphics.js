@@ -4,6 +4,7 @@ import * as THREE from './three_legacy';
 
 class Graphics {
     shaderLoader = new THREE.FileLoader();
+    raycaster = new THREE.Raycaster();
 
     shader(object) {
         this.shaderLoader.load('shader/vertex.glsl', (vertexShader) => {
@@ -24,7 +25,12 @@ class Graphics {
                 });
             });
         });
-  }
+    }
+
+    raycast(from, to) {
+        this.raycaster.set(from, to);
+        return this.raycaster.intersectObjects(window.scene.children, true);
+    }
 }
 
 export const graphics = new Graphics();

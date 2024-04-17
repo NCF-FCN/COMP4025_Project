@@ -1,17 +1,13 @@
 const { PlayerData } = require("shared");
+const Player = require("./player");
+const { WarehouseWorld } = require("./warehouseWorld");
 
 class GameServer {
     constructor() {
         this.gameInfo = {
             map: 'warehouse',
         };
-        this.spawnPoints = [
-            [0, 0, 100],
-            [100, 0, 100],
-            [100, 0, 200],
-            [0, 0, 200],
-        ];
-        this.nextSpawnPoint = 0;
+        this.world = new WarehouseWorld();
         this.players = {};
     }
 
@@ -19,48 +15,61 @@ class GameServer {
         console.log("[GameServer]", ...args);
     }
 
-    getNextSpawnPosition() {
-        const point = this.spawnPoints[this.nextSpawnPoint];
-        this.nextSpawnPoint = (this.nextSpawnPoint + 1) % this.spawnPoints.length;
-        return point;
+    getPlayerById(id) {
+        if(!(id in this.players)) {
+            this.log(`getPlayerById invalid id:`, id);
+            return null;
+        }
+        return this.players[id];
     }
 
     onIncomingConnection(socket) {
-        const thisPlayerData = this.players[socket.id] = new PlayerData({ 
-            id: socket.id, 
-            position: this.getNextSpawnPosition(),
-            angles: [0, 0, 0],
-            health: 100,
-        });
+        const thisPlayer = this.players[socket.id] = new Player(
+            this.world,
+            socket,
+            new PlayerData({ 
+                id: socket.id,
+            }),
+        );
         
-        this.log(`A user connected: ${thisPlayerData}`);
+        this.log(`A user connected: ${thisPlayer.data.id}`);
 
-        // socket.emit('gameInfo', gameInfo);
-        
-
-        // Send respawn to connecting player
-        socket.emit('respawn', thisPlayerData);
+        thisPlayer.respawn();
 
         // Send playerConnected of other existing players to connecting player
-        for(let data of Object.values(this.players)) {
+        for(let { data } of Object.values(this.players)) {
             if(data.id !== socket.id) {
                 socket.emit('playerConnected', data);
             }
         }
 
         // Send playerConnected to other players
-        socket.broadcast.emit('playerConnected', thisPlayerData);
+        socket.broadcast.emit('playerConnected', thisPlayer.data);
 
         socket.on('disconnect', () => {
-            this.log('User disconnected');
+            this.log('User disconnected', thisPlayer.data.id);
             socket.broadcast.emit('playerDisconnected', {id: socket.id});
             delete this.players[socket.id];
         });
 
         socket.on('move', (data) => {
-            thisPlayerData.position = data.position;
-            thisPlayerData.angles = data.angles;
-            socket.broadcast.emit('playerMoved', thisPlayerData);
+            // fields: position, angles
+            thisPlayer.moveTo({
+                position: data.position,
+                angles: data.angles
+            }, false);
+        });
+
+        socket.on('weaponFire', (data) => {
+            socket.broadcast.emit('weaponFire', {
+                id: thisPlayer.data.id,
+            })
+        });
+
+        socket.on('bulletHit', (data) => {
+            // fields: target, damage
+            const target = this.getPlayerById(data.target);
+            target.applyDamage(data.damage);
         });
     }
 }

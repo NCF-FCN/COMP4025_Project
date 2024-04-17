@@ -2,12 +2,27 @@
 2. Use "Temp-branch" as the push branch
 3. Remember to edit README.md
 
+## V0.26
+- Gun implementation added to player hands
+- Gun shooting animation
+- Added User HP, running, MP small UI
+
+## V0.25
+- Delete temp-branch
+- temp2-branch -> temp-branch
+- User movement of yaw and pitch is changed to mouse movement (input.js and localPlayer.js)
+- Key "L" locks cursor or releases to select sidebar (input.js)
+- Modified sidebar CSS
+- README.md updated
+
+
 ## V0.24
 - Attached gun to player model (POV and world)
 - Added remote player display
 - Added server-controlled respawn of players (local and remote)
 - Added player model
 - Added LocalPlayer model
+- README.md updated
 
 
 ## V0.23 

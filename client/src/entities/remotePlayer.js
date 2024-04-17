@@ -7,7 +7,8 @@ import { PlayerData } from "shared";
 import { game } from "../game";
 import { disposeNode } from "../map/common";
 
-import { GunGlock } from "./gunGlock";
+import { PlayerGun } from './playerGun';
+import { GunGlock } from './guns/glock';
 
 export class RemotePlayer {
     data = new PlayerData({});
@@ -25,8 +26,10 @@ export class RemotePlayer {
         });
 
         // Create gun entity attached to remote player
-        this.gunEntity = new GunGlock(false);
+        this.gunEntity = new PlayerGun(false);
         game.createEntity(this.gunEntity, this.model);
+
+        this.gunEntity.switchWeaponInstant(new GunGlock(false));
     }
 
     destroy() {
@@ -37,9 +40,15 @@ export class RemotePlayer {
     }
 
     setData(data) {
+        this.data = new PlayerData(data);
+        this.model.playerId = data.id;
         const { position, angles } = this.data;
         this.model.position.set(...position);
         this.model.quaternion.setFromEuler(new THREE.Euler(0, angles[1], 0, 'YXZ'));
+    }
+    
+    weaponFire() {
+        this.gunEntity.remoteFire();
     }
 
     // Called every frame 

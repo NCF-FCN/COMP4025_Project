@@ -110,9 +110,9 @@ class Game {
       // todo: load map given by server
     });
 
-    socket.on("respawn", data => {
-      this.log("Socket message respawn:", data);
-      this.localPlayer.respawn(data);
+    socket.on("playerSelfUpdate", data => {
+      this.log("Socket message playerSelfUpdate:", data);
+      this.localPlayer.updateFromServer(data);
     });
 
     socket.on("playerConnected", data => {
@@ -125,9 +125,14 @@ class Game {
       this.remotePlayerManager.playerDisconnect(data);
     });
 
-    socket.on("playerMoved", data => {
-      this.log("Socket message playerMoved:", data);
-      this.remotePlayerManager.playerMove(data);
+    socket.on("playerUpdate", data => {
+      // this.log("Socket message playerUpdate:", data);
+      this.remotePlayerManager.updateFromServer(data);
+    });
+
+    socket.on("weaponFire", data => {
+      this.log("Socket message weaponFire:", data);
+      this.remotePlayerManager.weaponFire(data);
     });
   }
 }
