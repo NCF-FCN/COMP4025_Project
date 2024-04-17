@@ -1,91 +1,100 @@
 <!DOCTYPE html>
 <html>
 
-<head>
+<bolt>
     <meta charset=utf-8>
     <title>Gun</title>
     <style>
         body {
             margin: 0;
+            padding: 0px;
+            overflow: hidden;
         }
 
         canvas {
             width: 100%;
-            height: 100%
+            height: 100%;
         }
     </style>
-</head>
+</bolt>
 
 <body>
     <script src="js/three.js"></script>
     <script src="js/loaders/GLTFLoader.js"></script>
-    <script src="js/controls/TrackballControls.js"></script>
     <script>
-
         // Scene
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x87cefa);
 
         // Camera
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500000);
-        camera.position.z = 200;
 
         // Renderer
         const renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Controls
-        const controls = new THREE.TrackballControls(camera, renderer.domElement);
-
         // Lighting
-        const ambientLight = new THREE.AmbientLight(0x404040, 5);
+        const ambientLight = new THREE.AmbientLight(0x404040, 10);
         scene.add(ambientLight);
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        const directionalLight = new THREE.DirectionalLight(0xffffff);
+        directionalLight.position.set(0, 40, 100);
         scene.add(directionalLight);
+
+        //gunGroup
+        const gunGroup = new THREE.Group();
+        scene.add(gunGroup);
 
         // GLTF Loader
         const gltfLoader = new THREE.GLTFLoader();
 
-        let gun9mm_head;
-        let gun9mm_bullet;
-        let gun9mm_body;
-        let gun9mm_trigger;
+        let gunBolt;
+        let gunBullet;
+        let gunBody;
+        let gunTrigger;
 
-        // Load GLTF resources for each object
-        function loadModel(path, callback) {
-            gltfLoader.load(
-                path,
-                function (gltf) {
-                    const object = gltf.scene;
-                    object.position.y = -60;
-                    scene.add(object);
-                    applyShaderToLoadedObject(object);
-                    if (callback) callback(object);
-                },
-                function (xhr) {
-                    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-                },
-                function (error) {
-                    console.error('An error happened', error);
-                }
-            );
-        }
+        new THREE.GLTFLoader().load("models/gun/9mm/body/scene.glb", function (gltf) {
+            gunBody = gltf.scene;
+            shader(gunBody);
+            gunGroup.add(gunBody);
+        }, undefined, function (error) {
+            console.error(error);
+        });
 
-        // Load each gun part
-        loadModel('models/gun/9mm/body/scene.glb', object => gun9mm_body = object);
-        loadModel('models/gun/9mm/bullet/scene.glb', object => gun9mm_bullet = object);
-        loadModel('models/gun/9mm/head/scene.glb', object => gun9mm_head = object);
-        loadModel('models/gun/9mm/trigger/scene.glb', object => gun9mm_trigger = object);
+        new THREE.GLTFLoader().load("models/gun/9mm/bolt/scene.glb", function (gltf) {
+            gunBolt = gltf.scene;
+            shader(gunBolt);
+            gunGroup.add(gunBolt);
+        }, undefined, function (error) {
+            console.error(error);
+        });
+
+        new THREE.GLTFLoader().load("models/gun/9mm/trigger/scene.glb", function (gltf) {
+            gunTrigger = gltf.scene;
+            shader(gunTrigger);
+            gunGroup.add(gunTrigger);
+            gunTrigger.position.set(-17, 112, 0);
+        }, undefined, function (error) {
+            console.error(error);
+        });
+
+        new THREE.GLTFLoader().load("models/gun/9mm/bullet/scene.glb", function (gltf) {
+            gunBullet = gltf.scene;
+            gunBullet.position.set(0, 140, 0);
+        }, undefined, function (error) {
+            console.error(error);
+        });
 
         // Apply shader to loaded object
-        function applyShaderToLoadedObject(object) {
+        function shader(object) {
             const shaderLoader = new THREE.FileLoader();
 
             shaderLoader.load('shader/vertex.glsl', function (vertexShader) {
                 shaderLoader.load('shader/fragment.glsl', function (fragmentShader) {
                     object.traverse(function (child) {
+                        child.castShadow = true;
+
                         if (child.isMesh) {
                             child.material = new THREE.ShaderMaterial({
                                 uniforms: {
@@ -95,56 +104,136 @@
                                 vertexShader: vertexShader,
                                 fragmentShader: fragmentShader
                             });
-                            child.castShadow = true;
                         }
                     });
-                    object.position.y -= 4;
                 });
             });
         }
 
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-        function onMouseMove(event) {
+        camera.position.set(900, 100, 300);
+        // camera.rotation.y = 0.5;
+        camera.lookAt(gunGroup.position);
+
+        //keybinding and animation
+        let isAnimating = false;
+
+        function onKeyDown(event) {
             event.preventDefault();
 
-            if (!gun9mm_head) return;
+            if (event.keyCode === 32 && !isAnimating) { // Spacebar key
+                isAnimating = true;
+                const gunBulletClone = gunBullet.clone();
 
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+                const pressTime = Date.now();
+                const gunGroup_duration = 100; //0.1 sec
+                const gunBolt_duration = 100; //0.1 sec
+                const gunTrigger_duration = 200; //0.2 sec
+                const gunBullet_duation = 100; //0.1 sec
 
-            raycaster.setFromCamera(mouse, camera);
+                let r_gunGroup_now = null, r_gunBolt_now = null, r_gunTrigger_now = null;
+                const r_gunGroup_duration = 150; //0.15 sec
+                const r_gunBolt_duration = 200; //0.2 sec
+                const r_gunTrigger_duration = 200; //0.2 sec
 
-            gun9mm_head.traverse(function (child) {
-                if (child instanceof THREE.Mesh) {
-                    const intersects = raycaster.intersectObject(child, false);
+                const audio = new Audio("sound/9mm_sound.mp3");
+                audio.play();
 
-                    if (intersects.length > 0) {
-                        gun9mm_head.position.x += 1;
+                // console.log("Press Time: " + pressTime);
+                function animateGun() {
+                    const now = Date.now();
+                    let gunGroup_progress = (now - pressTime) / gunGroup_duration; //((Time now - Time start) / Time) It will used for animation
+                    let gunBolt_progress = (now - pressTime) / gunBolt_duration;
+                    let gunTrigger_progress = (now - pressTime) / gunTrigger_duration;
+                    let gunBullet_process = (now - pressTime) / gunBullet_duation;
+
+                    if (gunBullet_process >= 1) gunBullet_process = 1;
+                    if (gunBullet_process < 1) {
+                        scene.add(gunBulletClone);
+                        gunBulletClone.position.x = 1000 * gunBullet_process;
+                    } else {
+                        scene.remove(gunBulletClone);
                     }
-                }
-            });
-        }
-        document.addEventListener('mousemove', onMouseMove, false);
 
-        // window resize
-        window.addEventListener('resize', onWindowResize, false);
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            controls.handleResize();
+                    if (gunGroup_progress <= 1) {
+                        gunGroup.rotation.z = 0.3 * gunGroup_progress; //finish rotate angle * time based progress (%)
+                        gunGroup.position.x = -100 * gunGroup_progress; //finish position * time based progress (%)
+
+                        // console.log("Now: " + now + ", gunGroup_progress: " + gunGroup_progress + ", gunGroup.rotation.z: " + gunGroup.rotation.z + ", gunGroup.position.x: " + gunGroup.position.x);
+                    } else {
+                        gunGroup.rotation.z = 0.3;  //if gunGroup_progress > 1,
+                        gunGroup.position.x = -100; //just set to 100% because setting cannot exceed setting
+
+                        //start reverse
+                        if (!r_gunGroup_now) {
+                            r_gunGroup_now = Date.now();
+                        }
+
+                        const r_gunGroup_progress = (now - r_gunGroup_now) / r_gunGroup_duration;
+
+                        if (r_gunGroup_progress <= 1) {
+                            gunGroup.rotation.z = 0.3 * (1 - r_gunGroup_progress);
+                            gunGroup.position.x = -100 * (1 - r_gunGroup_progress);
+                        } else {
+                            gunGroup.rotation.z = 0;
+                            gunGroup.position.x = 0;
+                        }
+
+                        // console.log("Now: " + now + ", r_gunGroup_now" + r_gunGroup_now + ", r_gunGroup_progress: " + r_gunGroup_progress + ", gunGroup.rotation.z: " + gunGroup.rotation.z + ", gunGroup.position.x: " + gunGroup.position.x);
+                    }
+
+                    if (gunTrigger_progress <= 1) {
+                        gunTrigger.rotation.z = -0.3 * gunTrigger_progress;
+                    } else {
+                        gunTrigger.rotation.z = -0.3
+
+                        if (!r_gunTrigger_now) {
+                            r_gunTrigger_now = Date.now();
+                        }
+
+                        const r_gunTrigger_progress = (now - r_gunTrigger_now) / r_gunTrigger_duration;
+
+                        if (r_gunTrigger_progress <= 1) {
+                            gunTrigger.rotation.z = -0.3 * (1 - r_gunTrigger_progress);
+                        } else {
+                            gunTrigger.rotation.z = 0;
+                            isAnimating = false; //put this at the end of the longest part of the animation
+                        }
+                    }
+
+                    if (gunBolt_progress <= 1) {
+                        gunBolt.position.x = -20 * gunBolt_progress;
+                    } else {
+                        gunBolt.position.x = -20;
+
+                        //start reverse
+                        if (!r_gunBolt_now) {
+                            r_gunBolt_now = Date.now();
+                        }
+
+                        const r_gunBolt_progress = (now - r_gunBolt_now) / r_gunBolt_duration;
+
+                        if (r_gunBolt_progress <= 1) {
+                            gunBolt.position.x = -20 * (1 - r_gunBolt_progress);
+                        } else {
+                            gunBolt.position.x = 0;
+                        }
+                    }
+
+                    requestAnimationFrame(animateGun);
+                }
+
+                animateGun();
+            }
         }
+        document.addEventListener('keydown', onKeyDown);
 
         // render function
         const render = function () {
             requestAnimationFrame(render);
-            controls.update();
             renderer.render(scene, camera);
         };
 
         render();
-
     </script>
 </body>
 
