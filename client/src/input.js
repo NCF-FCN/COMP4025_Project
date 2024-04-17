@@ -7,6 +7,8 @@ class Input {
 	};
 
 	Binds = {
+		Run: 16,      // Shift
+		Jump: 32, 	  // Space
 		Forward: 87,  // W
 		Back: 83,     // S
 		Left: 65,     // A
@@ -34,14 +36,22 @@ class Input {
 		this.pressedButtons[event.keyCode] = false;
 	}
 
+	mouseEventButtonToName(button) {
+    switch(button) {
+        case 0: return this.MouseButtons.MouseLeft;
+        case 2: return this.MouseButtons.MouseRight;
+        default: return null;
+    }
+	}
+
 	handleMouseDown(event) {
-		const buttonName = mouseEventButtonToName(event.button);
+		const buttonName = this.mouseEventButtonToName(event.button);
 		if (!buttonName) return;
 		this.pressedButtons[buttonName] = true;
 	}
 
 	handleMouseUp(event) {
-		const buttonName = mouseEventButtonToName(event.button);
+		const buttonName = this.mouseEventButtonToName(event.button);
 		if (!buttonName) return;
 		this.pressedButtons[buttonName] = false;
 	}

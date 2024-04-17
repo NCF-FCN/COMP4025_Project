@@ -2,6 +2,11 @@
 2. Use "Temp-branch" as the push branch
 3. Remember to edit README.md
 
+## V0.26
+- Gun implementation added to player hands
+- Gun shooting animation
+- Added User HP, running, MP small UI
+
 ## V0.25
 - Delete temp-branch
 - temp2-branch -> temp-branch
