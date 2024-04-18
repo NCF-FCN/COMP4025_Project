@@ -18,7 +18,7 @@ const showDebugRays = false;
 
 export class LocalPlayer {
     height = 150;
-    speed = 200;
+    speed = 225;
     runSpeed = 350;
     turnSpeed = Math.PI * 0.5;
     position = new THREE.Vector3(0, 0, 100);
@@ -35,7 +35,7 @@ export class LocalPlayer {
 
     constructor() {
         this.jumpAnimation = new AnimationController({
-            duration: 1.2,
+            duration: 1,
             // one way to implement custom gravity-like curve
             isTwoWay: false,
             onProgress: (progress) => {
