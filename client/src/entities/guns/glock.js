@@ -1,15 +1,19 @@
-// Class for handling the local player, including controls
-import { AnimationController } from "../../animationController";
-import { game } from "../../game";
-import { graphics } from "../../graphics";
-import { disposeNode } from "../../map/common";
 import * as THREE from '../../three_legacy'
+import { AnimationController } from "../../animationController";
+import { graphics } from "../../graphics";
 import { debugSliders } from "../../ui/debugSliders";
-import { Bullet } from "../ammo/bullet";
+import { GunBase } from "./gunBase";
 
-export class GunGlock {
+export class GunGlock extends GunBase {
+    static name = 'Glock';
+
     constructor(isViewModel) {
-        this.isViewModel = isViewModel;
+        super(isViewModel);
+        this.name = GunGlock.name;
+        this.reloadTime = 2.5;
+        this.ammoSize = 12;
+        this.damage = 30;
+        this.recoil = 0.2;
 
         this.gunBoltAnimation = new AnimationController({
             duration: 0.2,
@@ -24,45 +28,25 @@ export class GunGlock {
         });
     }
 
-    create({ loadModel, parentGroup }) {
-        // bullet prefab
-        this.bulletModel = new THREE.Group();
-
-        // main model
-        this.mainModel = new THREE.Group();
-        parentGroup.add(this.mainModel);
-        this.mainModel.position.set(-0.75, 1.05, -3.7);
-
-        // placeholder objects for gun parts
+    createGun({ loadModel }) {
         this.gunTrigger = new THREE.Object3D();
         this.gunBolt = new THREE.Object3D();
-        this.gunModel = new THREE.Group();
-        this.mainModel.add(this.gunModel);
-        this.gunModel.scale.set(0.115, 0.115, 0.115);
-        this.gunModel.position.set(7.6, 8.200000000000001, -13.8);
-        const gunAngles = new THREE.Euler(-0.228554418, 1.6359890864406776, -0.1554923886078842, 'YXZ');
-        this.gunModel.quaternion.setFromEuler(gunAngles)
 
-        // Player viewmodel
-        if (this.isViewModel) {
-            loadModel("models/player/scene.gltf", (model) => {
-                model.position.set(-96.5000000000000001, -33.9, -4.35);
-                const playerAngles = new THREE.Euler(4.24555, 0.97902, 3.1415, 'YXZ');
-                model.quaternion.setFromEuler(playerAngles);
-                model.scale.set(100, 100, 100);
-                this.mainModel.add(model);
-            });
-        }
+        // debugSliders("Gun Entity position", this.model.position.toArray(), 50, (components) => {
+        //     this.model.position.set(...components);
+        // })
+        // debugSliders("Gun Entity rotation", 0, Math.PI/4, (components) => {
+        //     this.model.quaternion.setFromEuler(new THREE.Euler(...components, 'YXZ'));
+        // })
 
-        // debugSliders("Main Model position", this.mainModel.position.toArray(), 50, (components) => {
-        //     this.mainModel.position.set(...components);
-        // })
-        // debugSliders("Gun position", this.gunModel.position.toArray(), 50, (components) => {
-        //     this.gunModel.position.set(...components);
-        // })
-        // debugSliders("Gun rotation", gunAngles.toArray(), Math.PI / 4, (components) => {
+        // debugSliders("Gun rotation", gunAngles.toArray(), Math.PI/4, (components) => {
         //     this.gunModel.quaternion.setFromEuler(new THREE.Euler(...components, 'YXZ'));
         // })
+
+        this.gunModel.position.set(0, 10, -20);
+        this.gunModel.scale.set(0.15, 0.15, 0.15);
+        const gunAngles = new THREE.Euler(0.1, 1.69175, -0.07539);
+        this.gunModel.quaternion.setFromEuler(gunAngles);
 
         // Gun parts
         loadModel("models/gun/glock/body.glb", (model) => {
@@ -80,74 +64,32 @@ export class GunGlock {
             model.position.set(-17, 112, 0);
             this.gunModel.add(model);
         });
-
-        // Bullet prefab
-        loadModel("models/gun/bullet/scene.gltf", (model) => {
-            model.scale.set(0.3, 0.3, 0.3);
-            model.position.set(0, 140, 0);
-            model.rotation.y = Math.PI / 2;
-            this.bulletModel.add(model);
-        });
     }
 
-    destroy() {
-        this.bulletModel.traverse(disposeNode);
-        this.mainModel.traverse(disposeNode);
-        this.mainModel.parent.remove(this.mainModel);
-    }
-
-    get worldQuaternion() {
-        var quaternion = new THREE.Quaternion(-0.16);
-        this.mainModel.getWorldQuaternion(quaternion);
+    get barrelQuaternion() {
+        // barrel rotation relative to this.gunModel
+        var quaternion = new THREE.Quaternion();
+        quaternion.setFromEuler(new THREE.Euler(0, -Math.PI / 2, 0, 'YXZ'));
         return quaternion;
     }
 
-    get worldPosition() {
-        var vector = new THREE.Vector3();
-        this.gunModel.getWorldPosition(vector);
-        return vector;
-    }
-
-    get forward() {
-        var forward = new THREE.Vector3(0, 0, -1);
-        forward.applyQuaternion(this.worldQuaternion);
-        return forward;
-    }
-
-    get up() {
-        var forward = new THREE.Vector3(0, 1, 0);
-        forward.applyQuaternion(this.worldQuaternion);
-        return forward;
-    }
-
     canFire() {
-        // can shoot when bolt finished animating, or is near complete
-        const canShoot = !this.gunBoltAnimation.running || (
+        return !this.gunBoltAnimation.running || (
             this.gunBoltAnimation.finishedOneWay &&
             this.gunBoltAnimation.progress < 0.3
         );
-
-        if (!canShoot) return false;
-
-        this.shotAnimation();
-        return true;
     }
 
     shotAnimation() {
         this.gunBoltAnimation.start();
 
         new Audio("sound/9mm_sound.mp3").play();
-        setTimeout(() => {
-            new Audio("sound/bulletShell_hit_ground.mp3").play()
-        }, "553");
+        setTimeout(() => { new Audio("sound/bulletShell_hit_ground.mp3").play() }, "553");
 
-        const bulletPos = this.worldPosition.addScaledVector(this.up, 19).addScaledVector(this.forward, 21);
-        const randomOffset = new THREE.Vector3((Math.random() - 0.5) * 0.03, (Math.random() - 0.5) * 0.03, (Math.random() - 0.5) * 0.03);
-        const bulletDirection = this.forward.clone().add(randomOffset);
-
-        const bullet = new Bullet(this.worldQuaternion, bulletDirection, this.isViewModel);
-        game.createEntity(bullet);
-        bullet.model.position.set(bulletPos.x, bulletPos.y, bulletPos.z);
+        const accuracy = (Math.random() - 0.5) * 0.7;
+        const forwardWithOffset = this.forward.clone().add(new THREE.Vector3(accuracy, accuracy, accuracy));
+        const bulletPos = this.worldPosition.addScaledVector(this.up, 19).addScaledVector(forwardWithOffset, 10);
+        this.spawnBullet(bulletPos);
     }
 
     // Called every frame 

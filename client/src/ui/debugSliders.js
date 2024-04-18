@@ -1,6 +1,6 @@
 
 export function debugSliders(name, offset, range, callback) {
-    const template = document.getElementById("debugSlider");
+    const template = document.getElementById("debug-slider-template");
     const clone = template.cloneNode(true);
     template.parentElement.appendChild(clone);
     clone.style.display = 'block';

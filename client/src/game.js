@@ -1,13 +1,14 @@
-
 // Global game instance, keeps track of current loaded map, local player, and any global state
 import { LocalPlayer } from "./entities/localPlayer";
+import { mapPrepare } from "./map/common";
+import { loadWarehouse } from "./map/warehouse";
 import { ModelLoader } from "./modelLoader";
 import { Connection } from "./network/Connection";
 import { RemotePlayerManager } from "./remotePlayerManager";
 import * as THREE from './three_legacy';
+import { setupRespawnUI } from "./ui/respawn";
 
 class Game {
-    // todo: move three.js renderer, camera etc here
     constructor() {
         // this.map = null;
         this.connection = null;
@@ -18,6 +19,10 @@ class Game {
         this.remotePlayerManager = new RemotePlayerManager();
 
         requestAnimationFrame(() => this.updateWorld());
+
+        setupRespawnUI(() => {
+            this.emit("respawn");
+        })
     }
 
     log(...args) {
@@ -25,12 +30,16 @@ class Game {
     }
 
     prepareWorld() {
+        mapPrepare();
+
         this.directionalLight = new THREE.DirectionalLight(0xffffff);
         this.directionalLight.position.set(50, 100, 100);
-        scene.add(this.directionalLight);
+        window.scene.add(this.directionalLight);
 
         this.localPlayer = new LocalPlayer();
         this.createEntity(this.localPlayer);
+
+        loadWarehouse();
     }
 
     createEntity(entity, parent = undefined) {
@@ -43,7 +52,7 @@ class Game {
     }
 
     destroyEntity(entity) {
-        const index = this.entities.findIndex(x => x === entity);
+        const index = this.entities.indexOf(entity);
         if (index < 0) throw new Error("Trying to delete entity which is not spawned in world!");
         this.entities.splice(index, 1);
         entity.destroy();
@@ -68,15 +77,6 @@ class Game {
         this.lastUpdate = now;
         requestAnimationFrame(() => this.updateWorld());
     }
-
-    // changeWorld(map) {
-    //   // todo: move map loading here, right now warehouse is loaded only
-    //   if(this.map) {
-    //     this.map.unload(this);
-    //   }
-    //   this.map = map;
-    //   this.map.load(this);
-    // }
 
     disconnect() {
         if (this.connection) {
@@ -126,10 +126,28 @@ class Game {
             this.remotePlayerManager.updateFromServer(data);
         });
 
+        socket.on("playerDeath", data => {
+            this.log("Socket message playerDeath:", data);
+            this.remotePlayerManager.playerDeath(data);
+        });
+
         socket.on("weaponFire", data => {
             this.log("Socket message weaponFire:", data);
             this.remotePlayerManager.weaponFire(data);
         });
+
+        socket.on("weaponChange", data => {
+            this.log("Socket message weaponChange:", data);
+            this.remotePlayerManager.weaponChange(data);
+        });
+    }
+
+    onConnectionConnected() {
+        this.localPlayer.connectedToServer();
+    }
+
+    onConnectionDisconnected() {
+        this.remotePlayerManager.disconnectedFromServer();
     }
 }
 

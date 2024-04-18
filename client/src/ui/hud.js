@@ -13,3 +13,8 @@ export function setHudMP(mp) {
     document.getElementById("hud-text-mp").innerText = Math.round(mp);
     setBar("hud-bar-mp", mp / 200);
 }
+
+export function setHudAmmo(current, max) {
+    document.getElementById("hud-text-ammo").innerText = `${current} / ${max}`;
+    setBar("hud-bar-ammo", current / max);
+}

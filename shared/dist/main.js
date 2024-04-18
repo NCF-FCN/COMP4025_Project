@@ -14,11 +14,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 
 class PlayerData {
-    constructor({ id, position, angles, health }) {
+    constructor({ id, position, angles, health, weapon }) {
         this.id = id;
         this.position = position;
         this.angles = angles;
         this.health = health;
+        this.weapon = weapon;
+    }
+
+    getClientUpdate() {
+        return {
+            id: this.id,
+            position: this.position,
+            angles: this.angles,
+            health: this.health
+        };
     }
 
     // Helper method to display in console

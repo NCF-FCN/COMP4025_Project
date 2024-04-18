@@ -4,44 +4,37 @@ import { mapPrepare } from './common';
 import { game } from '../game';
 import { graphics } from '../graphics';
 
-const developmentModeLoadMinimum = true;
+const developmentModeLoadMinimum = false;
 
 export function loadWarehouse() {
-    mapPrepare();
-
     //scene attribute
-    scene.name = "warehouse";
+    scene.name = "map_warehouse";
 
     //wallGroup
     const wallGroup = new THREE.Group();
-    scene.add(wallGroup);
+    window.scene.add(wallGroup);
 
     //smallObject1Group
     const smallObject1Group = new THREE.Group();
-    scene.add(smallObject1Group);
+    smallObject1Group.name = "smallObject1Group";
+    window.scene.add(smallObject1Group);
 
     //smallObject2Group
     const smallObject2Group = new THREE.Group();
-    scene.add(smallObject2Group);
+    smallObject2Group.name = "smallObject2Group";
+    window.scene.add(smallObject2Group);
 
     //smallObject3Group
     const smallObject3Group = new THREE.Group();
-    scene.add(smallObject3Group);
-
-    //gunGroup
-    const gunGroup = new THREE.Group();
-    scene.add(gunGroup);
-    gunGroup.position.set(0, 100, 0);
-    gunGroup.scale.set(0.3, 0.3, 0.3);
-
-    // GLTF object
-    let gunBolt, gunBullet, gunBody, gunTrigger;
+    smallObject3Group.name = "smallObject3Group";
+    window.scene.add(smallObject3Group);
 
     const gltfLoader = new GLTFLoader();
     // floor x1 -> scene
     gltfLoader.load("models/warehouse/floor/scene.glb", function (gltf) {
         const floor = gltf.scene;
-        scene.add(floor);
+        floor.name = "floor";
+        window.scene.add(floor);
 
         floor.scale.set(56, 1, 56);
         floor.rotation.y = Math.PI / 2;
@@ -52,28 +45,30 @@ export function loadWarehouse() {
         loadedModel++;
     });
 
+    //factory1 x1 -> scene
+    gltfLoader.load("models/warehouse/factory/factory1/scene.glb", function (gltf) {
+        const factory1 = gltf.scene;
+        graphics.shader(factory1);
+        factory1.name = "factory1";
+        window.scene.add(factory1);
+
+        factory1.scale.set(200, 100, 100);
+        factory1.position.set(103, 0, -2250);
+        factory1.rotation.y = - Math.PI / 2;
+
+        loadedModel++;
+    }, undefined, function (error) {
+        console.error(error);
+        loadedModel++;
+    });
+
     if (!developmentModeLoadMinimum) {
-        //factory1 x1 -> scene
-        gltfLoader.load("models/warehouse/factory/factory1/scene.glb", function (gltf) {
-            const factory1 = gltf.scene;
-            graphics.shader(factory1);
-            scene.add(factory1);
-
-            factory1.scale.set(200, 100, 100);
-            factory1.position.set(103, 0, -2250);
-            factory1.rotation.y = - Math.PI / 2;
-
-            loadedModel++;
-        }, undefined, function (error) {
-            console.error(error);
-            loadedModel++;
-        });
 
         //factory2 x1 -> scene
         gltfLoader.load("models/warehouse/factory/factory2/scene.glb", function (gltf) {
             const factory2 = gltf.scene;
             graphics.shader(factory2);
-            scene.add(factory2);
+            window.scene.add(factory2);
 
             factory2.scale.set(16, 17, 17);
             factory2.position.set(-1330, 190, 180);
@@ -162,7 +157,7 @@ export function loadWarehouse() {
             positions.forEach((pos) => {
                 let door = gltf.scene.clone();
                 graphics.shader(door);
-                scene.add(door);
+                window.scene.add(door);
 
                 door.position.set(pos.x, pos.y, pos.z);
 
@@ -179,11 +174,13 @@ export function loadWarehouse() {
             loadedModel++;
         });
 
-        //container1 x2 -> scene
+        //container1 x3 -> scene
         gltfLoader.load("models/warehouse/container/container1/scene.gltf", function (gltf) {
             const positions = [
                 { x: 730, z: -1220 },
-                { x: -750, z: 1180 }
+                { x: -750, z: 1180 },
+                { x: -50, z: 240 },
+                { x: 200, z: -600 }
             ]
 
             gltf.scene.scale.set(105, 105, 105);
@@ -191,9 +188,13 @@ export function loadWarehouse() {
             positions.forEach((pos) => {
                 let container1 = gltf.scene.clone();
                 graphics.shader(container1);
-                scene.add(container1);
+                window.scene.add(container1);
 
                 container1.position.set(pos.x, 0, pos.z);
+
+                if(pos.x === -50){
+                    container1.rotation.y = - Math.PI / 4;
+                }
             });
 
             loadedModel++;
@@ -214,7 +215,7 @@ export function loadWarehouse() {
             positions.forEach((pos) => {
                 let container2 = gltf.scene.clone();
                 graphics.shader(container2);
-                scene.add(container2);
+                window.scene.add(container2);
 
                 container2.position.set(pos.x, 0, pos.z);
 
@@ -329,21 +330,21 @@ export function loadWarehouse() {
 
             let standing_light = gltf.scene.clone();
             graphics.shader(standing_light);
-            scene.add(standing_light);
+            window.scene.add(standing_light);
             standing_light.position.set(-510, 130, -70);
             standing_light.rotation.y = 0.7;
 
             standing_light = gltf.scene.clone();
             graphics.shader(standing_light);
-            scene.add(standing_light);
+            window.scene.add(standing_light);
             standing_light.position.set(510, 130, 510);
             standing_light.rotation.y = Math.PI + 0.32;
 
             standing_light = gltf.scene.clone();
             graphics.shader(standing_light);
-            scene.add(standing_light);
+            window.scene.add(standing_light);
             standing_light.position.set(640, 412, -980);
-            standing_light.rotation.y = Math.PI / 2 - 0.3;
+            standing_light.rotation.y = - Math.PI / 2 - 0.3;
 
             loadedModel++;
         }, undefined, function (error) {
@@ -363,7 +364,7 @@ export function loadWarehouse() {
             positions.forEach((pos) => {
                 let safety_cone = gltf.scene.clone();
                 graphics.shader(safety_cone);
-                scene.add(safety_cone);
+                window.scene.add(safety_cone);
 
                 safety_cone.position.set(pos.x, 0, pos.z);
                 safety_cone.rotation.y = Math.random() * Math.PI * 2;
@@ -408,6 +409,7 @@ export function loadWarehouse() {
         });
     }
 
+
     //spotlight
     function spotlight(posX, posY, posZ, tarX, tarY, tarZ) {
         let spotLight = new THREE.SpotLight(0xffffff, 0.6, 0, Math.PI / 5, 0.1);
@@ -428,137 +430,4 @@ export function loadWarehouse() {
     spotlight(-510, 170, -70, 0, 170, 530);
     spotlight(510, 170, 510, 200, 170, -1000);
     spotlight(640, 412, -980, 200, 412, -1100);
-
-    let isAnimating = false;
-
-    function gunFire(event) {
-        event.preventDefault();
-
-        if (isAnimating) {
-            return;
-        }
-
-        if (event.keyCode === 32 && !isAnimating) { // Spacebar key
-            isAnimating = true;
-            const gunBulletClone = gunBullet.clone();
-
-            //gun position
-            const gunGroup_fromRotationZ = gunGroup.rotation.z;
-            const gunGroup_toRotationZ = 0.3;
-            const gunGroup_fromPositionX = gunGroup.position.x;
-            const gunGroup_toPositionX = -80;
-            const gunTrigger_fromRotationZ = gunTrigger.rotation.z;
-            const gunTrigger_toRotationZ = -0.3;
-            const gunBolt_fromPositionX = gunBolt.position.x;
-            const gunBolt_toPositionX = -20;
-            const gunBullet_fromPositionX = gunBullet.position.x;
-            const gunBullet_toPositionX = 1000;
-
-
-            const pressTime = Date.now();
-            const gunGroup_duration = 200; //0.2 sec
-            const gunBolt_duration = 200; //0.2 sec
-            const gunTrigger_duration = 400; //0.4 sec
-            const gunBullet_duration = 200; //0.2 sec
-
-            let r_gunGroup_now = null, r_gunBolt_now = null, r_gunTrigger_now = null;
-            const r_gunGroup_duration = 300; //0.3 sec
-            const r_gunBolt_duration = 400; //0.4 sec
-            const r_gunTrigger_duration = 400; //0.4 sec
-
-            const audio = new Audio("sound/9mm_sound.mp3");
-            audio.play();
-
-            // console.log("Press Time: " + pressTime);
-            function animateGun() {
-                const now = Date.now();
-                let gunGroup_progress = (now - pressTime) / gunGroup_duration; //((Time now - Time start) / Time) It will used for animation
-                let gunBolt_progress = (now - pressTime) / gunBolt_duration;
-                let gunTrigger_progress = (now - pressTime) / gunTrigger_duration;
-                let gunBullet_process = (now - pressTime) / gunBullet_duration;
-
-                if (gunBullet_process >= 1) {
-                    gunBullet_process = 1;
-                }
-
-                if (gunBullet_process < 1) {
-                    scene.add(gunBulletClone);
-                    gunBulletClone.position.x = gunBullet_fromPositionX + (gunBullet_toPositionX - gunBullet_fromPositionX) * gunBullet_process;
-                } else {
-                    scene.remove(gunBulletClone);
-                }
-
-                if (gunGroup_progress <= 1) {
-                    gunGroup.rotation.z = gunGroup_fromRotationZ + (gunGroup_toRotationZ - gunGroup_fromRotationZ) * gunGroup_progress;
-                    gunGroup.position.x = gunGroup_fromPositionX + (gunGroup_toPositionX - gunGroup_fromPositionX) * gunGroup_progress;
-
-                    // console.log("Now: " + now + ", gunGroup_progress: " + gunGroup_progress + ", gunGroup.rotation.z: " + gunGroup.rotation.z + ", gunGroup.position.x: " + gunGroup.position.x);
-                } else {
-                    gunGroup.rotation.z = gunGroup_toRotationZ;  //if gunGroup_progress > 1,
-                    gunGroup.position.x = gunGroup_toPositionX; //just set to 100% because setting cannot exceed setting
-
-                    //start reverse
-                    if (!r_gunGroup_now) {
-                        r_gunGroup_now = Date.now();
-                    }
-
-                    const r_gunGroup_progress = (now - r_gunGroup_now) / r_gunGroup_duration;
-
-                    if (r_gunGroup_progress <= 1) {
-                        gunGroup.rotation.z = gunGroup_fromRotationZ + (gunGroup_toRotationZ - gunGroup_fromRotationZ) * (1 - r_gunGroup_progress);
-                        gunGroup.position.x = gunGroup_fromPositionX + (gunGroup_toPositionX - gunGroup_fromPositionX) * (1 - r_gunGroup_progress);
-                    } else {
-                        gunGroup.rotation.z = gunGroup_fromRotationZ;
-                        gunGroup.position.x = gunGroup_fromPositionX;
-                    }
-
-                    // console.log("Now: " + now + ", r_gunGroup_now" + r_gunGroup_now + ", r_gunGroup_progress: " + r_gunGroup_progress + ", gunGroup.rotation.z: " + gunGroup.rotation.z + ", gunGroup.position.x: " + gunGroup.position.x);
-                }
-
-                // if (gunTrigger_progress <= 1) {
-                //     gunTrigger.rotation.z = gunTrigger_fromRotationZ + (gunTrigger_toRotationZ - gunTrigger_fromRotationZ) * gunTrigger_progress;
-                // } else {
-                //     gunTrigger.rotation.z = gunTrigger_toRotationZ;
-
-                //     if (!r_gunTrigger_now) {
-                //         r_gunTrigger_now = Date.now();
-                //     }
-
-                //     const r_gunTrigger_progress = (now - r_gunTrigger_now) / r_gunTrigger_duration;
-
-                //     if (r_gunTrigger_progress <= 1) {
-                //         gunTrigger.rotation.z = gunTrigger_fromRotationZ + (gunTrigger_toRotationZ - gunTrigger_fromRotationZ) * (1 - r_gunTrigger_progress);
-                //     } else {
-                //         gunTrigger.rotation.z = gunTrigger_fromRotationZ;
-                //         isAnimating = false; //put this at the end of the longest part of the animation
-                //     }
-                // }
-
-                if (gunBolt_progress <= 1) {
-                    gunBolt.position.x = gunBolt_fromPositionX + (gunBolt_toPositionX - gunBolt_fromPositionX) * gunBolt_progress;
-                } else {
-                    gunBolt.position.x = gunBolt_toPositionX;
-
-                    //start reverse
-                    if (!r_gunBolt_now) {
-                        r_gunBolt_now = Date.now();
-                    }
-
-                    const r_gunBolt_progress = (now - r_gunBolt_now) / r_gunBolt_duration;
-
-                    if (r_gunBolt_progress <= 1) {
-                        gunBolt.position.x = gunBolt_fromPositionX + (gunBolt_toPositionX - gunBolt_fromPositionX) * (1 - r_gunBolt_progress);
-                    } else {
-                        gunBolt.position.x = gunBolt_fromPositionX;
-                        isAnimating = false; //put this at the end of the longest part of the animation
-                    }
-                }
-
-                requestAnimationFrame(animateGun);
-            }
-
-            animateGun();
-        }
-    }
-    document.addEventListener('keydown', gunFire);
 }
