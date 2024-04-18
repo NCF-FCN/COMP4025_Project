@@ -1,6 +1,4 @@
-
 // Handles websocket connection
-
 import { setConnectedStatus } from "../ui/networkConnect";
 import { io } from "socket.io-client";
 
@@ -20,6 +18,7 @@ export class Connection {
             if (!this.game) return;
             setConnectedStatus(true, false, "Connected.");
             console.log("[WebSocket]", "Connected.");
+            this.game.onConnectionConnected(this.socket);
         });
 
         this.socket.on("connect_failed", (e) => {
@@ -32,6 +31,7 @@ export class Connection {
             if (!this.game) return;
             setConnectedStatus(false, false, "Disconnected.");
             console.log("[WebSocket]", "Disconnected.");
+            this.game.onConnectionDisconnected();
         });
 
         this.socket.on("handshake", (data) => {

@@ -11,11 +11,14 @@ class Player {
       console.log(`[Player ${this.data.id}]`, ...args);
   }
 
-  moveTo({ position, angles }, informSelf = true) {
+  moveTo({ position, angles }, informSelf = true, dontBroadcast = false) {
     if(position) this.data.position = position;
     if(angles) this.data.angles = angles;
-    this.broadcastPlayerUpdate(informSelf);
+    if(!dontBroadcast) {
+      this.broadcastPlayerUpdate(informSelf);
+    }
   }
+
 
   applyDamage(damage) {
     if(!(damage > 0)) {
@@ -27,34 +30,51 @@ class Player {
     if(this.data.health <= 0) {
       this.data.health = 0;
       this.kill();
-    }else{
-      this.sendPlayerSelfUpdate();
     }
+    this.sendPlayerSelfUpdate();
   }
 
   kill() {
-    this.respawn();
+    this.broadcastDeath();
   }
 
-  respawn() {
+  respawn(dontBroadcast = false) {
     this.data.health = 100;
     this.moveTo({
       position: this.world.getNextSpawnPosition(),
       angles: [0, 0, 0]
-    });
+    }, true, dontBroadcast);
+  }
+  
+  weaponChange(weapon) {
+    this.data.weapon = weapon;
+    this.broadcastWeaponChange();
   }
 
   // Network
 
+  broadcastWeaponChange() {
+    this.socket.broadcast.emit('weaponChange', {
+      id: this.data.id,
+      weapon: this.data.weapon,
+    })
+  }
+
+  broadcastDeath() {
+    this.socket.broadcast.emit('playerDeath', {
+      id: this.data.id,
+    })
+  }
+
   broadcastPlayerUpdate(alsoSendSelfUpdate) {
-    this.socket.broadcast.emit('playerUpdate', this.data);
+    this.socket.broadcast.emit('playerUpdate', this.data.getClientUpdate());
     if(alsoSendSelfUpdate) {
       this.sendPlayerSelfUpdate()
     }
   }
 
   sendPlayerSelfUpdate() {
-    this.socket.emit('playerSelfUpdate', this.data);
+    this.socket.emit('playerSelfUpdate', this.data.getClientUpdate());
   }
 }
 

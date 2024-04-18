@@ -49,10 +49,30 @@ export class RemotePlayerManager {
         this.players[playerData.id].setData(playerData);
     }
 
+    playerDeath(playerData) {
+        const entity = this.getPlayerById(playerData.id);
+        if (!entity) return;
+
+        this.players[playerData.id].death(playerData);
+    }
+
     weaponFire({ id }) {
         const entity = this.getPlayerById(id);
         if (!entity) return;
         entity.weaponFire();
+    }
+
+    weaponChange({ id, weapon }) {
+        const entity = this.getPlayerById(id);
+        if (!entity) return;
+        entity.weaponChange(weapon);
+    }
+
+    disconnectedFromServer() {
+        for (let entity of Object.values(this.players)) {
+            game.destroyEntity(entity);
+        }
+        this.players = {};
     }
 }
 

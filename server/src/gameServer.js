@@ -34,7 +34,8 @@ class GameServer {
         
         this.log(`A user connected: ${thisPlayer.data.id}`);
 
-        thisPlayer.respawn();
+        // Initialize this player
+        thisPlayer.respawn(true);
 
         // Send playerConnected of other existing players to connecting player
         for(let { data } of Object.values(this.players)) {
@@ -42,9 +43,10 @@ class GameServer {
                 socket.emit('playerConnected', data);
             }
         }
-
         // Send playerConnected to other players
         socket.broadcast.emit('playerConnected', thisPlayer.data);
+
+        thisPlayer.sendPlayerSelfUpdate();
 
         socket.on('disconnect', () => {
             this.log('User disconnected', thisPlayer.data.id);
@@ -59,11 +61,20 @@ class GameServer {
                 angles: data.angles
             }, false);
         });
+        
+        socket.on('respawn', () => {
+            thisPlayer.respawn();
+        });
 
         socket.on('weaponFire', (data) => {
             socket.broadcast.emit('weaponFire', {
                 id: thisPlayer.data.id,
             })
+        });
+
+        socket.on('weaponChange', (data) => {
+            thisPlayer.data.weapon = data.weapon;
+            thisPlayer.weaponChange(data.weapon);
         });
 
         socket.on('bulletHit', (data) => {

@@ -1,4 +1,7 @@
 // Class for handles input to the game, allows for querying pressed buttons 
+import { isRespawnUIOpen } from "./ui/respawn";
+import { setSidebarVisible } from "./ui/sidebar";
+
 class Input {
 	MouseButtons = {
 		MouseLeft: 'MouseLeft',
@@ -6,14 +9,16 @@ class Input {
 	};
 
 	Binds = {
-		Run: 16,      // Shift
-		Jump: 32, 	  // Space
-		Forward: 87,  // W
-		Back: 83,     // S
-		Left: 65,     // A
-		Right: 68,    // D
+		Run: 16, // Shift
+		Jump: 32, // Space
+		Forward: 87, // W
+		Back: 83, // S
+		Left: 65, // A
+		Right: 68, // D
+		Reload: 82, // R
 		Fire: this.MouseButtons.MouseLeft,
 		LockMouse: 76, // L
+		DebugFreezePlayer: 88, // X
 	};
 
 	pressedButtons = {};
@@ -28,6 +33,9 @@ class Input {
 	}
 
 	handleKeyDown(event) {
+		if (event.keyCode === this.Binds.LockMouse) {
+			this.handleLockMouseToggle();
+		}
 		this.pressedButtons[event.keyCode] = true;
 	}
 
@@ -44,6 +52,13 @@ class Input {
 	}
 
 	handleMouseDown(event) {
+		if (!this.mouseLocked) {
+			if (event.target === window.renderer.domElement) {
+				this.lockMouse();
+			}
+			return; // ignore mouse events if not locked
+		};
+		event.preventDefault(); // if mouse is locked, capture event
 		const buttonName = this.mouseEventButtonToName(event.button);
 		if (!buttonName) return;
 		this.pressedButtons[buttonName] = true;
@@ -69,17 +84,32 @@ class Input {
 		}
 	}
 
+	lockMouse() {
+		if (isRespawnUIOpen()) {
+			return; // don't lock when respawn window is open
+		}
+		document.body.requestPointerLock();
+	}
+
+	unlockMouse() {
+		document.exitPointerLock();
+	}
+
 	handleLockMouseToggle() {
-		this.mouseLocked = !this.mouseLocked;
 		if (this.mouseLocked) {
-			document.body.requestPointerLock();
+			this.unlockMouse()
 		} else {
-			document.exitPointerLock();
+			this.lockMouse();
 		}
 	}
 
-	getMouseLocked(){
-		return this.mouseLocked;
+	handleMousePointerLockChange() {
+		this.mouseLocked = document.pointerLockElement !== null;
+		setSidebarVisible(!this.mouseLocked);
+	}
+
+	handleMousePointerLockError() {
+		alert("You must wait a second before focusing the game after using ESC button. Use L button instead.")
 	}
 
 	initialize() {
@@ -88,11 +118,8 @@ class Input {
 		document.addEventListener('mousedown', this.handleMouseDown.bind(this));
 		document.addEventListener('mouseup', this.handleMouseUp.bind(this));
 		document.addEventListener('mousemove', this.handleMouseMove.bind(this));
-		document.addEventListener('keydown', (event) => {
-			if (event.keyCode === this.Binds.LockMouse) {
-				this.handleLockMouseToggle();
-			}
-		});
+		document.addEventListener("pointerlockchange", this.handleMousePointerLockChange.bind(this));
+		document.addEventListener("pointerlockerror", this.handleMousePointerLockError.bind(this));
 	}
 }
 

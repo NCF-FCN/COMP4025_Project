@@ -1,6 +1,3 @@
-
-//import * as THREE from 'three'
-import { game } from '../game';
 import * as THREE from '../three_legacy'
 
 export function mapPrepare() {
@@ -27,8 +24,6 @@ export function mapPrepare() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.gammaOutput = true;
     document.body.appendChild(renderer.domElement);
-
-    game.prepareWorld();
 }
 
 //free up the RAM
@@ -37,9 +32,7 @@ export function disposeNode(node) {
         if (node.geometry) node.geometry.dispose();
 
         if (node.material) {
-            // todo: check for multi material
             if (node.material.materials) {
-                // if (node.material instanceof THREE.MeshFaceMaterial || node.material instanceof THREE.Material) {
                 node.material.materials.forEach(function (mtrl, idx) {
                     if (mtrl.map) mtrl.map.dispose();
                     if (mtrl.lightMap) mtrl.lightMap.dispose();

@@ -1,5 +1,5 @@
-
 import { game } from './game';
+import { isChildOrSelfRecursive } from './helpers';
 import * as THREE from './three_legacy';
 
 class Graphics {
@@ -27,9 +27,17 @@ class Graphics {
         });
     }
 
-    raycast(from, to) {
-        this.raycaster.set(from, to);
-        return this.raycaster.intersectObjects(window.scene.children, true);
+    raycast(from, dir) {
+        this.raycaster.set(from, dir);
+        const rootObjects = window.scene.children;
+        return this.raycaster.intersectObjects(rootObjects, true);
+    }
+
+    raycastIgnore(from, dir, ignoredModel) {
+        const allHits = this.raycast(from, dir);
+        return allHits.filter(
+            ({ object }) => !isChildOrSelfRecursive(object, ignoredModel)
+        );
     }
 }
 
