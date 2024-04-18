@@ -18,7 +18,7 @@ export class Bullet {
         this.isLocalPlayer = isLocalPlayer;
         this.quaternion = quaternion;
         this.position = position;
-        this.speed = 4000;
+        this.speed = 5000;
         this.lifetimeLeft = 2;
         this.shootingPlayerModel = shootingPlayerModel;
 
