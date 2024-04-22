@@ -2,6 +2,9 @@
 2. Use "Temp-branch" as the push branch
 3. Remember to edit README.md
 
+## V1.1
+- README.md updated
+
 ## V1.0
 - Modified player attributes (mp, speed, jump)
 - Function showFire() renamed to shotAnimation()
@@ -10,7 +13,8 @@
 - Added gunShell_hit_ground.mp3, m249_sound.mp3, awp_sound.mp3 to each gun .js shotAnimation()
 - Added bullet_hit_metal.mp3 to bullet.js update()
 - Added bullet_hit_people.mp3 to respawn.js setDamageEffect()
-- Added 2 more container1 to warehouse map
+- Added 2 more container1 to "Warehouse" map
+- Delete "Forest" map and all models
 
 
 ## V0.27
@@ -30,12 +34,13 @@
 - temp2-branch -> temp-branch
 - User movement of yaw and pitch is changed to mouse movement (input.js and localPlayer.js)
 - Key "L" locks cursor or releases to select sidebar (input.js)
-- Modified sidebar CSS
+- Modified CSS
 - README.md updated
 
 
 ## V0.24
-- Attached gun to player model (POV and world)
+- Attached gun to player model
+- Modified the camera to player model looking
 - Added remote player display
 - Added server-controlled respawn of players (local and remote)
 - Added player model
@@ -51,7 +56,7 @@
 ## V0.22 beta
 - Deleted Trace back control
 - Added keyboard control to "warehouse" map
-- Added "worldGroup" to rotate "warehouse" map
+- Added "worldGroup"
 
 ## V0.21
 - Modified the properties of "shelves"
