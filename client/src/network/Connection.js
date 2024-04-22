@@ -3,7 +3,6 @@ import { setConnectedStatus } from "../ui/networkConnect";
 import { io } from "socket.io-client";
 
 export class Connection {
-
     constructor(game, url) {
         this.game = game;
         this.id = null;
